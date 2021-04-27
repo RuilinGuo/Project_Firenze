@@ -73,4 +73,19 @@ public class GameTest {
         assertEquals(1, game.getPlayerCurrentBet(playerB));
         assertEquals(1, game.getPlayerTotalBet(playerB));
     }
+
+    @Test
+    void should_update_status_when_player_fold() {
+        //given
+        Player playerA = new Player(10);
+        Player playerB = new Player(10);
+        Game game = new Game(Arrays.asList(playerA, playerB));
+
+        //when
+        GameManager.playerFold(game, game.getCurrentPlayer());\
+
+        //then
+        assertEquals(9, playerA.getHoldingChips());
+        assertEquals(9, playerB.getHoldingChips());
+    }
 }

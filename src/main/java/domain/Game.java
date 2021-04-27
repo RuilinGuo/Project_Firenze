@@ -83,17 +83,8 @@ public class Game {
     public void playerCall() {
         Integer playerCurrentBet = this.getPlayerCurrentBet(this.currentPlayer);
         Integer playerBet = this.currentBet - playerCurrentBet;
-        this.pot += playerBet;
-        this.currentRoundPlayerBetChips.put(this.currentPlayer, this.currentBet);
-        this.playerTotalBetChips.put(this.currentPlayer, getPlayerTotalBet(this.currentPlayer) + playerBet);
-
-        this.completedPlayers.add(this.currentPlayer);
-
-        if (this.waitingPlayers.size() > 0) {
-            this.currentPlayer = this.waitingPlayers.poll();
-        } else {
-            this.currentPlayer = null;
-        }
+        updatePotAndPlayerBetChips(playerBet);
+        completedPlayer(this.currentPlayer);
     }
 
     public void playerBet(Integer betNum) {
@@ -101,20 +92,34 @@ public class Game {
             throw new RuntimeException("在轮次结束之后无法再下注");
         }
         this.currentBet += betNum;
-        this.pot += betNum;
-        this.currentRoundPlayerBetChips.put(this.currentPlayer, getPlayerCurrentBet(this.currentPlayer) + betNum);
-        this.playerTotalBetChips.put(this.currentPlayer, getPlayerTotalBet(this.currentPlayer) + betNum);
 
-        while (this.completedPlayers.size() > 0) {
-            this.waitingPlayers.add(this.completedPlayers.poll());
-        }
+        updatePotAndPlayerBetChips(betNum);
+        resetWaitingPlayers();
+        completedPlayer(this.currentPlayer);
+    }
 
-        this.completedPlayers.add(this.currentPlayer);
+    public void playerFold() {
+        completedPlayer(null);
+    }
 
+    private void completedPlayer(Player currentPlayer) {
+        this.completedPlayers.add(currentPlayer);
         if (this.waitingPlayers.size() > 0) {
             this.currentPlayer = this.waitingPlayers.poll();
         } else {
             this.currentPlayer = null;
+        }
+    }
+
+    private void updatePotAndPlayerBetChips(Integer playerBet) {
+        this.pot += playerBet;
+        this.currentRoundPlayerBetChips.put(this.currentPlayer, getPlayerCurrentBet(this.currentPlayer) + playerBet);
+        this.playerTotalBetChips.put(this.currentPlayer, getPlayerTotalBet(this.currentPlayer) + playerBet);
+    }
+
+    private void resetWaitingPlayers() {
+        while (this.completedPlayers.size() > 0) {
+            this.waitingPlayers.add(this.completedPlayers.poll());
         }
     }
 }

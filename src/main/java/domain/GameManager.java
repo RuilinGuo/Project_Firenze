@@ -15,4 +15,8 @@ public class GameManager {
         player.call(game.getCurrentBet(), game.getPlayerCurrentBet(player));
         game.playerCall();
     }
+
+    public static void playerFold(Game game, Player player) {
+        game.playerFold();
+    }
 }
