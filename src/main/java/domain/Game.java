@@ -51,28 +51,6 @@ public class Game {
         });
     }
 
-    public void playerBet(Integer betNum) {
-        if (Objects.isNull(this.currentPlayer)) {
-            throw new RuntimeException("在轮次结束之后无法再下注");
-        }
-        this.currentBet += betNum;
-        this.pot += betNum;
-        this.currentRoundPlayerBetChips.put(this.currentPlayer, getPlayerCurrentBet(this.currentPlayer) + betNum);
-        this.playerTotalBetChips.put(this.currentPlayer, getPlayerTotalBet(this.currentPlayer) + betNum);
-
-        while (this.completedPlayers.size() > 0) {
-            this.waitingPlayers.add(this.completedPlayers.poll());
-        }
-
-        this.completedPlayers.add(this.currentPlayer);
-
-        if (this.waitingPlayers.size() > 0) {
-            this.currentPlayer = this.waitingPlayers.poll();
-        } else {
-            this.currentPlayer = null;
-        }
-    }
-
     public void start() {
         if (Objects.nonNull(playerList) && playerList.size() < 2) {
             throw new RuntimeException("玩家人数不足，无法开始游戏");
@@ -108,6 +86,28 @@ public class Game {
         this.pot += playerBet;
         this.currentRoundPlayerBetChips.put(this.currentPlayer, this.currentBet);
         this.playerTotalBetChips.put(this.currentPlayer, getPlayerTotalBet(this.currentPlayer) + playerBet);
+
+        this.completedPlayers.add(this.currentPlayer);
+
+        if (this.waitingPlayers.size() > 0) {
+            this.currentPlayer = this.waitingPlayers.poll();
+        } else {
+            this.currentPlayer = null;
+        }
+    }
+
+    public void playerBet(Integer betNum) {
+        if (Objects.isNull(this.currentPlayer)) {
+            throw new RuntimeException("在轮次结束之后无法再下注");
+        }
+        this.currentBet += betNum;
+        this.pot += betNum;
+        this.currentRoundPlayerBetChips.put(this.currentPlayer, getPlayerCurrentBet(this.currentPlayer) + betNum);
+        this.playerTotalBetChips.put(this.currentPlayer, getPlayerTotalBet(this.currentPlayer) + betNum);
+
+        while (this.completedPlayers.size() > 0) {
+            this.waitingPlayers.add(this.completedPlayers.poll());
+        }
 
         this.completedPlayers.add(this.currentPlayer);
 
