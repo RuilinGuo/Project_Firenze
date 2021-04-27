@@ -1,0 +1,24 @@
+.gradle
+/build/
+!gradle/wrapper/gradle-wrapper.jar
+.DS_Store
+;
+### local environment ###
+local
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.log
+*.iml
+*.ipr
+/out/
