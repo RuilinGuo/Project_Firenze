@@ -7,6 +7,7 @@ import java.util.Arrays;
 
 import static domain.GameStatus.START;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class GameTest {
 
@@ -45,5 +46,31 @@ public class GameTest {
         assertEquals(1, game.getCompletedPlayers().size());
         assertEquals(1, game.getPlayerCurrentBet(playerA));
         assertEquals(1, game.getPlayerTotalBet(playerA));
+    }
+
+    @Test
+    void should_update_status_when_player_call() {
+        //given
+        Player playerA = new Player(10);
+        Player playerB = new Player(10);
+        Game game = new Game(Arrays.asList(playerA, playerB));
+
+        //when
+        GameManager.playerBet(game, game.getCurrentPlayer(),1);
+        GameManager.playerCall(game, game.getCurrentPlayer());
+
+        //then
+        assertEquals(9, playerA.getHoldingChips());
+        assertEquals(9, playerB.getHoldingChips());
+
+        assertEquals(1, game.getCurrentBet());
+        assertNull(game.getCurrentPlayer());
+        assertEquals(2, game.getPot());
+        assertEquals(0, game.getWaitingPlayers().size());
+        assertEquals(2, game.getCompletedPlayers().size());
+        assertEquals(1, game.getPlayerCurrentBet(playerA));
+        assertEquals(1, game.getPlayerTotalBet(playerA));
+        assertEquals(1, game.getPlayerCurrentBet(playerB));
+        assertEquals(1, game.getPlayerTotalBet(playerB));
     }
 }

@@ -10,4 +10,9 @@ public class GameManager {
         player.bet(betNum, game.getPlayerCurrentBet(player));
         game.playerBet(betNum);
     }
+
+    public static void playerCall(Game game, Player player) {
+        player.call(game.getCurrentBet(), game.getPlayerCurrentBet(player));
+        game.playerCall();
+    }
 }

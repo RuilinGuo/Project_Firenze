@@ -101,4 +101,20 @@ public class Game {
     public Integer getPlayerTotalBet(Player player) {
         return this.playerTotalBetChips.get(player);
     }
+
+    public void playerCall() {
+        Integer playerCurrentBet = this.getPlayerCurrentBet(this.currentPlayer);
+        Integer playerBet = this.currentBet - playerCurrentBet;
+        this.pot += playerBet;
+        this.currentRoundPlayerBetChips.put(this.currentPlayer, this.currentBet);
+        this.playerTotalBetChips.put(this.currentPlayer, getPlayerTotalBet(this.currentPlayer) + playerBet);
+
+        this.completedPlayers.add(this.currentPlayer);
+
+        if (this.waitingPlayers.size() > 0) {
+            this.currentPlayer = this.waitingPlayers.poll();
+        } else {
+            this.currentPlayer = null;
+        }
+    }
 }

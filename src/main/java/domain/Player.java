@@ -7,7 +7,7 @@ import lombok.Getter;
 public class Player {
     private Integer holdingChips;
 
-    public boolean isHoldingChips(){
+    public boolean isHoldingChips() {
         return holdingChips > 0;
     }
 
@@ -17,5 +17,9 @@ public class Player {
 
     public void bet(Integer betNum, Integer currentBet) {
         this.holdingChips -= betNum - currentBet;
+    }
+
+    public void call(Integer bet, Integer currentBet) {
+        this.holdingChips -= bet - currentBet;
     }
 }
