@@ -4,8 +4,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Queue;
 
@@ -19,6 +21,8 @@ public class Game {
     private Player currentPlayer;
     private Queue<Player> waitingPlayers;
     private Queue<Player> completedPlayers;
+    private Map<Player, Integer> currentRoundPlayerBetChips;
+    private Map<Player, Integer> playerTotalBetChips;
 
     public Game() {
         this.status = GameStatus.STOP;
@@ -26,6 +30,8 @@ public class Game {
         this.pot = 0;
         this.waitingPlayers = new LinkedList<>();
         this.completedPlayers = new LinkedList<>();
+        this.currentRoundPlayerBetChips = new HashMap<>();
+        this.playerTotalBetChips = new HashMap<>();
     }
 
     public Game(List<Player> playerList) {
@@ -37,15 +43,29 @@ public class Game {
         this.waitingPlayers.addAll(playerList);
         this.currentPlayer = this.waitingPlayers.poll();
         this.completedPlayers = new LinkedList<>();
+        this.currentRoundPlayerBetChips = new HashMap<>();
+        this.playerTotalBetChips = new HashMap<>();
+        playerList.forEach(item -> {
+            this.currentRoundPlayerBetChips.put(item, 0);
+            this.playerTotalBetChips.put(item, 0);
+        });
     }
 
     public void playerBet(Integer betNum) {
         if (Objects.isNull(this.currentPlayer)) {
             throw new RuntimeException("在轮次结束之后无法再下注");
         }
-        this.currentBet = betNum;
+        this.currentBet += betNum;
         this.pot += betNum;
+        this.currentRoundPlayerBetChips.put(this.currentPlayer, getPlayerCurrentBet(this.currentPlayer) + betNum);
+        this.playerTotalBetChips.put(this.currentPlayer, getPlayerTotalBet(this.currentPlayer) + betNum);
+
+        while (this.completedPlayers.size() > 0) {
+            this.waitingPlayers.add(this.completedPlayers.poll());
+        }
+
         this.completedPlayers.add(this.currentPlayer);
+
         if (this.waitingPlayers.size() > 0) {
             this.currentPlayer = this.waitingPlayers.poll();
         } else {
@@ -70,7 +90,15 @@ public class Game {
         }
         this.playerList.add(player);
         this.waitingPlayers.add(player);
+        this.currentRoundPlayerBetChips.put(player, 0);
+        this.playerTotalBetChips.put(player, 0);
     }
 
+    public Integer getPlayerCurrentBet(Player player) {
+        return this.currentRoundPlayerBetChips.get(player);
+    }
 
+    public Integer getPlayerTotalBet(Player player) {
+        return this.playerTotalBetChips.get(player);
+    }
 }

@@ -32,9 +32,9 @@ public class GameTest {
         Player playerA = new Player(10);
         Player playerB = new Player(10);
         Game game = new Game(Arrays.asList(playerA, playerB));
-        //when
 
-        GameManager.playerBet(game, 1);
+        //when
+        GameManager.playerBet(game, game.getCurrentPlayer(),1);
 
         //then
         assertEquals(9, playerA.getHoldingChips());
@@ -43,6 +43,7 @@ public class GameTest {
         assertEquals(1, game.getPot());
         assertEquals(0, game.getWaitingPlayers().size());
         assertEquals(1, game.getCompletedPlayers().size());
-
+        assertEquals(1, game.getPlayerCurrentBet(playerA));
+        assertEquals(1, game.getPlayerTotalBet(playerA));
     }
 }

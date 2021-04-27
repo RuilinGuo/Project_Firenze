@@ -15,7 +15,7 @@ public class Player {
         this.holdingChips = holdingChips;
     }
 
-    public void bet(Integer betNum) {
-        this.holdingChips -= betNum;
+    public void bet(Integer betNum, Integer currentBet) {
+        this.holdingChips -= betNum - currentBet;
     }
 }
