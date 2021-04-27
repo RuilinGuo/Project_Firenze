@@ -82,7 +82,7 @@ public class GameTest {
         Game game = new Game(Arrays.asList(playerA, playerB));
 
         //when
-        GameManager.playerFold(game, game.getCurrentPlayer());\
+        GameManager.playerFold(game, game.getCurrentPlayer());
 
         //then
         assertEquals(9, playerA.getHoldingChips());
