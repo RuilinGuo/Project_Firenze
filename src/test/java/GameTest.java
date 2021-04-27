@@ -85,7 +85,9 @@ public class GameTest {
         GameManager.playerFold(game, game.getCurrentPlayer());
 
         //then
-        assertEquals(9, playerA.getHoldingChips());
-        assertEquals(9, playerB.getHoldingChips());
+        assertEquals(10, playerA.getHoldingChips());
+        assertEquals(10, playerB.getHoldingChips());
+        assertEquals(playerB, game.getCurrentPlayer());
+        assertEquals(0, game.getCompletedPlayers().size());
     }
 }

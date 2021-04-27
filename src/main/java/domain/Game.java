@@ -84,7 +84,7 @@ public class Game {
         Integer playerCurrentBet = this.getPlayerCurrentBet(this.currentPlayer);
         Integer playerBet = this.currentBet - playerCurrentBet;
         updatePotAndPlayerBetChips(playerBet);
-        completedPlayer(this.currentPlayer);
+        completedPlayer();
     }
 
     public void playerBet(Integer betNum) {
@@ -95,15 +95,19 @@ public class Game {
 
         updatePotAndPlayerBetChips(betNum);
         resetWaitingPlayers();
-        completedPlayer(this.currentPlayer);
+        completedPlayer();
     }
 
     public void playerFold() {
-        completedPlayer(null);
+        if (this.waitingPlayers.size() > 0) {
+            this.currentPlayer = this.waitingPlayers.poll();
+        } else {
+            this.currentPlayer = null;
+        }
     }
 
-    private void completedPlayer(Player currentPlayer) {
-        this.completedPlayers.add(currentPlayer);
+    private void completedPlayer() {
+        this.completedPlayers.add(this.currentPlayer);
         if (this.waitingPlayers.size() > 0) {
             this.currentPlayer = this.waitingPlayers.poll();
         } else {
