@@ -35,7 +35,7 @@ public class GameTest {
         Game game = new Game(Arrays.asList(playerA, playerB));
 
         //when
-        GameManager.playerBet(game, game.getCurrentPlayer(),1);
+        GameManager.playerBet(game, game.getCurrentPlayer(), 1);
 
         //then
         assertEquals(9, playerA.getHoldingChips());
@@ -56,7 +56,7 @@ public class GameTest {
         Game game = new Game(Arrays.asList(playerA, playerB));
 
         //when
-        GameManager.playerBet(game, game.getCurrentPlayer(),1);
+        GameManager.playerBet(game, game.getCurrentPlayer(), 1);
         GameManager.playerCall(game, game.getCurrentPlayer());
 
         //then
@@ -89,5 +89,45 @@ public class GameTest {
         assertEquals(10, playerB.getHoldingChips());
         assertEquals(playerB, game.getCurrentPlayer());
         assertEquals(0, game.getCompletedPlayers().size());
+    }
+
+    @Test
+    void should_enter_next_round_when_all_player_completed() {
+        //given
+        Player playerA = new Player(10);
+        Player playerB = new Player(10);
+        Game game = new Game(Arrays.asList(playerA, playerB));
+
+        //when
+        GameManager.playerBet(game, game.getCurrentPlayer(), 1);
+        GameManager.playerCall(game, game.getCurrentPlayer());
+        GameManager.nextRound(game);
+
+        //then
+        assertEquals(9, playerA.getHoldingChips());
+        assertEquals(9, playerB.getHoldingChips());
+        assertEquals(playerA, game.getCurrentPlayer());
+        assertEquals(0, game.getCurrentBet());
+        assertEquals(2, game.getPot());
+    }
+
+    @Test
+    void should_over_game_when_a_winner_after_game_settlement() {
+        //given
+        Player playerA = new Player(10);
+        Player playerB = new Player(10);
+        Game game = new Game(Arrays.asList(playerA, playerB));
+        GameManager.playerBet(game, playerA, 2);
+        GameManager.playerCall(game, playerB);
+
+        //when
+        GameManager.settleGame(game, playerA);
+
+        //then
+        assertEquals(12, playerA.getHoldingChips());
+        assertEquals(8, playerB.getHoldingChips());
+        assertNull(game.getCurrentPlayer());
+        assertNull(game.getCurrentBet());
+        assertEquals(0, game.getPot());
     }
 }

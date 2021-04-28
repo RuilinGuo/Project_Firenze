@@ -28,6 +28,8 @@ public class Game {
         this.status = GameStatus.STOP;
         this.playerList = new ArrayList<>();
         this.pot = 0;
+        this.currentBet = null;
+        this.currentPlayer = null;
         this.waitingPlayers = new LinkedList<>();
         this.completedPlayers = new LinkedList<>();
         this.currentRoundPlayerBetChips = new HashMap<>();
@@ -106,6 +108,13 @@ public class Game {
         }
     }
 
+    public void nextRound() {
+        resetWaitingPlayers();
+        this.currentRoundPlayerBetChips.entrySet().forEach(entry -> entry.setValue(0));
+        this.currentBet = 0 ;
+        this.currentPlayer = this.waitingPlayers.poll();
+    }
+
     private void completedPlayer() {
         this.completedPlayers.add(this.currentPlayer);
         if (this.waitingPlayers.size() > 0) {
@@ -125,5 +134,17 @@ public class Game {
         while (this.completedPlayers.size() > 0) {
             this.waitingPlayers.add(this.completedPlayers.poll());
         }
+    }
+
+    public void init() {
+        this.status = GameStatus.STOP;
+        this.playerList = new ArrayList<>();
+        this.pot = 0;
+        this.currentBet = null;
+        this.currentPlayer = null;
+        this.waitingPlayers = new LinkedList<>();
+        this.completedPlayers = new LinkedList<>();
+        this.currentRoundPlayerBetChips = new HashMap<>();
+        this.playerTotalBetChips = new HashMap<>();
     }
 }

@@ -19,4 +19,13 @@ public class GameManager {
     public static void playerFold(Game game, Player player) {
         game.playerFold();
     }
+
+    public static void nextRound(Game game) {
+        game.nextRound();
+    }
+
+    public static void settleGame(Game game, Player winner) {
+        winner.win(game.getPot());
+        game.init();
+    }
 }
