@@ -4,12 +4,27 @@ import java.util.Objects;
 
 public class Player {
     private String name;
+    private boolean tookAction;
+
     public Player(String name) {
         this.name = name;
+        this.tookAction = false;
     }
 
     public String getName() {
         return name;
+    }
+
+    public void tookAction() {
+        this.tookAction = true;
+    }
+
+    public boolean isTookAction() {
+        return tookAction;
+    }
+
+    public void resetAction(){
+        this.tookAction = false;
     }
 
     @Override

@@ -71,6 +71,8 @@ public class GameTest {
         game.execute(new Bet());
 
         assertEquals(Round.FLOP, game.getCurrentRound());
+        assertEquals("a",game.getActivePlayer().getName());
+        assertEquals(false, game.getActivePlayer().isTookAction());
     }
 
     @Test
@@ -91,6 +93,7 @@ public class GameTest {
         assertEquals("a", game.getActivePlayer().getName());
         assertEquals(4, game.getPot());
         assertEquals(2, game.getCurrentBid());
+        assertEquals(false,game.getActivePlayer().isTookAction());
     }
 
     @Test
@@ -127,7 +130,7 @@ public class GameTest {
     }
 
     @Test
-    void should_() {
+    void should_remove_player_when_player_fold() {
         Game game = new Game(new Player("a"), new Player("b"), new Player("c"));
 
         assertEquals("a", game.getActivePlayer().getName());
