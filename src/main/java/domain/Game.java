@@ -1,150 +1,113 @@
 package domain;
 
-import lombok.Getter;
-import lombok.Setter;
-
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Queue;
+import java.util.Set;
 
-@Setter
-@Getter
 public class Game {
-    private GameStatus status;
-    private List<Player> playerList;
-    private Integer pot;
-    private Integer currentBet;
-    private Player currentPlayer;
-    private Queue<Player> waitingPlayers;
-    private Queue<Player> completedPlayers;
-    private Map<Player, Integer> currentRoundPlayerBetChips;
-    private Map<Player, Integer> playerTotalBetChips;
+    private Set<Object> playersTookAction;
+    private Round currentRound;
+    private LinkedList<Player> awaitingPlayers;
+    private Set<Player> activePlayers;
+    private int pot;
+    private int currentBid;
+    private Player[] players;
+    private Map<Player, Integer> roundWagers;
 
-    public Game() {
-        this.status = GameStatus.STOP;
-        this.playerList = new ArrayList<>();
+
+    public Game(Player... players) {
+        this.players = players;
+        this.awaitingPlayers = new LinkedList<>(Arrays.asList(players));
         this.pot = 0;
-        this.currentBet = null;
-        this.currentPlayer = null;
-        this.waitingPlayers = new LinkedList<>();
-        this.completedPlayers = new LinkedList<>();
-        this.currentRoundPlayerBetChips = new HashMap<>();
-        this.playerTotalBetChips = new HashMap<>();
+        this.currentBid = 0;
+        this.playersTookAction = new HashSet<>();
+        this.currentRound = Round.PREFLOP;
+        this.roundWagers =  new HashMap<>();
+        this.activePlayers = new HashSet<>(Arrays.asList(players));
+
+        Arrays.stream(players).forEach(item -> roundWagers.put(item, 0));
     }
 
-    public Game(List<Player> playerList) {
-        this.status = GameStatus.START;
-        this.playerList = playerList;
-        this.pot = 0;
-        this.currentBet = 0;
-        this.waitingPlayers = new LinkedList<>();
-        this.waitingPlayers.addAll(playerList);
-        this.currentPlayer = this.waitingPlayers.poll();
-        this.completedPlayers = new LinkedList<>();
-        this.currentRoundPlayerBetChips = new HashMap<>();
-        this.playerTotalBetChips = new HashMap<>();
-        playerList.forEach(item -> {
-            this.currentRoundPlayerBetChips.put(item, 0);
-            this.playerTotalBetChips.put(item, 0);
-        });
+    public Player getActivePlayer() {
+        return awaitingPlayers.peek();
     }
 
-    public void start() {
-        if (Objects.nonNull(playerList) && playerList.size() < 2) {
-            throw new RuntimeException("玩家人数不足，无法开始游戏");
-        }
-        if (playerList.stream().anyMatch(item -> !item.isHoldingChips())) {
-            throw new RuntimeException("所有玩家必须持有筹码");
-        }
-        this.status = GameStatus.START;
-        this.currentPlayer = this.waitingPlayers.poll();
+    public int getPot() {
+        return this.pot;
     }
 
-    public void addPlayer(Player player) {
-        if (playerList.contains(player)) {
-            throw new RuntimeException("玩家人数不足，无法开始游戏");
-        }
-        this.playerList.add(player);
-        this.waitingPlayers.add(player);
-        this.currentRoundPlayerBetChips.put(player, 0);
-        this.playerTotalBetChips.put(player, 0);
+    public int getCurrentBid() {
+        return this.currentBid;
     }
 
-    public Integer getPlayerCurrentBet(Player player) {
-        return this.currentRoundPlayerBetChips.get(player);
-    }
-
-    public Integer getPlayerTotalBet(Player player) {
-        return this.playerTotalBetChips.get(player);
-    }
-
-    public void playerCall() {
-        Integer playerCurrentBet = this.getPlayerCurrentBet(this.currentPlayer);
-        Integer playerBet = this.currentBet - playerCurrentBet;
-        updatePotAndPlayerBetChips(playerBet);
-        completedPlayer();
-    }
-
-    public void playerBet(Integer betNum) {
-        if (Objects.isNull(this.currentPlayer)) {
-            throw new RuntimeException("在轮次结束之后无法再下注");
-        }
-        this.currentBet += betNum;
-
-        updatePotAndPlayerBetChips(betNum);
-        resetWaitingPlayers();
-        completedPlayer();
-    }
-
-    public void playerFold() {
-        if (this.waitingPlayers.size() > 0) {
-            this.currentPlayer = this.waitingPlayers.poll();
-        } else {
-            this.currentPlayer = null;
+    private void nextRound() {
+        if (playersTookAction.size() == players.length &&
+            activePlayers.stream().allMatch(player -> roundWagers.get(player) == currentBid)) {
+            currentRound = Round.values()[currentRound.ordinal() + 1];
         }
     }
 
-    public void nextRound() {
-        resetWaitingPlayers();
-        this.currentRoundPlayerBetChips.entrySet().forEach(entry -> entry.setValue(0));
-        this.currentBet = 0 ;
-        this.currentPlayer = this.waitingPlayers.poll();
+    public int getMiniWager() {
+        return 1;
     }
 
-    private void completedPlayer() {
-        this.completedPlayers.add(this.currentPlayer);
-        if (this.waitingPlayers.size() > 0) {
-            this.currentPlayer = this.waitingPlayers.poll();
-        } else {
-            this.currentPlayer = null;
+    public Round getCurrentRound() {
+        return this.currentRound;
+    }
+
+    public void awaiting(Player activePlayer) {
+        awaitingPlayers.offer(activePlayer);
+    }
+
+    public void bet() {
+        Player activePlayer = awaitingPlayers.poll();
+        if(this.currentBid < getMiniWager()) {
+            setCurrentBid(getMiniWager());
         }
+        putInPot(currentBid - roundWagers.get(activePlayer));
+        wage(activePlayer, this.currentBid);
+        awaiting(activePlayer);
+
+
+        playersTookAction.add(activePlayer);
+        nextRound();
     }
 
-    private void updatePotAndPlayerBetChips(Integer playerBet) {
-        this.pot += playerBet;
-        this.currentRoundPlayerBetChips.put(this.currentPlayer, getPlayerCurrentBet(this.currentPlayer) + playerBet);
-        this.playerTotalBetChips.put(this.currentPlayer, getPlayerTotalBet(this.currentPlayer) + playerBet);
+    private void wage(Player activePlayer, int wager) {
+        roundWagers.put(activePlayer, wager);
     }
 
-    private void resetWaitingPlayers() {
-        while (this.completedPlayers.size() > 0) {
-            this.waitingPlayers.add(this.completedPlayers.poll());
-        }
+    public void raise(int wager) {
+        Player activePlayer = awaitingPlayers.poll();
+
+        setCurrentBid(wager);
+        putInPot(this.currentBid);
+        wage(activePlayer, roundWagers.get(activePlayer) + this.currentBid);
+        awaiting(activePlayer);
+
+        playersTookAction.add(activePlayer);
+        nextRound();
     }
 
-    public void init() {
-        this.status = GameStatus.STOP;
-        this.playerList = new ArrayList<>();
-        this.pot = 0;
-        this.currentBet = null;
-        this.currentPlayer = null;
-        this.waitingPlayers = new LinkedList<>();
-        this.completedPlayers = new LinkedList<>();
-        this.currentRoundPlayerBetChips = new HashMap<>();
-        this.playerTotalBetChips = new HashMap<>();
+    private void putInPot(int currentBid) {
+        this.pot += currentBid;
+    }
+
+    private void setCurrentBid(int wager) {
+        this.currentBid = wager;
+    }
+
+    public void execute(Action action) {
+        Player activePlayer = awaitingPlayers.poll();
+        action.execute(this, activePlayer);
+        playersTookAction.add(activePlayer);
+        nextRound();
+    }
+
+    public void inactive(Player activePlayer) {
+        activePlayers.remove(activePlayer);
     }
 }

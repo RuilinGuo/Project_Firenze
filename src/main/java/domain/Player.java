@@ -1,29 +1,27 @@
 package domain;
 
+import java.util.Objects;
 
-import lombok.Getter;
-
-@Getter
 public class Player {
-    private Integer holdingChips;
-
-    public boolean isHoldingChips() {
-        return holdingChips > 0;
+    private String name;
+    public Player(String name) {
+        this.name = name;
     }
 
-    public Player(Integer holdingChips) {
-        this.holdingChips = holdingChips;
+    public String getName() {
+        return name;
     }
 
-    public void bet(Integer betNum, Integer currentBet) {
-        this.holdingChips -= betNum - currentBet;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Player player = (Player) o;
+        return Objects.equals(name, player.name);
     }
 
-    public void call(Integer bet, Integer currentBet) {
-        this.holdingChips -= bet - currentBet;
-    }
-
-    public void win(Integer pot) {
-        this.holdingChips += pot;
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 }
