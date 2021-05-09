@@ -1,3 +1,4 @@
+import domain.Bet;
 import domain.Fold;
 import domain.Game;
 import domain.Pass;
@@ -33,7 +34,7 @@ public class GameTest {
     void should_set_current_bid_to_min_wager_when_player_a_bet() {
         Game game = new Game(new Player("a"), new Player("b"), new Player("c"));
 
-        game.bet();
+        game.execute(new Bet());
 
         assertEquals("b", game.getActivePlayer().getName());
         assertEquals(1, game.getPot());
@@ -61,11 +62,11 @@ public class GameTest {
         assertEquals(Round.PREFLOP, game.getCurrentRound());
 
         assertEquals("a", game.getActivePlayer().getName());
-        game.bet();
+        game.execute(new Bet());
         assertEquals("b", game.getActivePlayer().getName());
-        game.bet();
+        game.execute(new Bet());
         assertEquals("c", game.getActivePlayer().getName());
-        game.bet();
+        game.execute(new Bet());
 
         assertEquals(Round.FLOP, game.getCurrentRound());
     }
@@ -77,9 +78,9 @@ public class GameTest {
         assertEquals(Round.PREFLOP, game.getCurrentRound());
 
         assertEquals("a", game.getActivePlayer().getName());
-        game.bet();
+        game.execute(new Bet());
         assertEquals("b", game.getActivePlayer().getName());
-        game.bet();
+        game.execute(new Bet());
 
         assertEquals("c", game.getActivePlayer().getName());
         game.raise(2);
@@ -97,11 +98,11 @@ public class GameTest {
         assertEquals(Round.PREFLOP, game.getCurrentRound());
 
         assertEquals("a", game.getActivePlayer().getName());
-        game.bet();
+        game.execute(new Bet());
         int playerAWager = game.getCurrentBid();
 
         assertEquals("b", game.getActivePlayer().getName());
-        game.bet();
+        game.execute(new Bet());
 
 
         assertEquals("c", game.getActivePlayer().getName());
@@ -111,13 +112,15 @@ public class GameTest {
         int pot = game.getPot();
 
         assertEquals("a", game.getActivePlayer().getName());
-        game.bet();//call
+        //call
+        game.execute(new Bet());
 
         assertEquals(3, game.getCurrentBid());
         assertEquals(game.getCurrentBid() - playerAWager, game.getPot() - pot);
 
         assertEquals("b", game.getActivePlayer().getName());
-        game.bet();//call
+        //call
+        game.execute(new Bet());
         assertEquals(Round.FLOP, game.getCurrentRound());
     }
 

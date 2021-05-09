@@ -25,7 +25,7 @@ public class Game {
         this.currentBid = 0;
         this.playersTookAction = new HashSet<>();
         this.currentRound = Round.PREFLOP;
-        this.roundWagers =  new HashMap<>();
+        this.roundWagers = new HashMap<>();
         this.activePlayers = new HashSet<>(Arrays.asList(players));
 
         Arrays.stream(players).forEach(item -> roundWagers.put(item, 0));
@@ -45,7 +45,7 @@ public class Game {
 
     private void nextRound() {
         if (playersTookAction.size() == players.length &&
-            activePlayers.stream().allMatch(player -> roundWagers.get(player) == currentBid)) {
+                activePlayers.stream().allMatch(player -> getPlayerCurrentWager(player) == currentBid)) {
             currentRound = Round.values()[currentRound.ordinal() + 1];
         }
     }
@@ -62,41 +62,27 @@ public class Game {
         awaitingPlayers.offer(activePlayer);
     }
 
-    public void bet() {
-        Player activePlayer = awaitingPlayers.poll();
-        if(this.currentBid < getMiniWager()) {
-            setCurrentBid(getMiniWager());
-        }
-        putInPot(currentBid - roundWagers.get(activePlayer));
-        wage(activePlayer, this.currentBid);
-        awaiting(activePlayer);
-
-
-        playersTookAction.add(activePlayer);
-        nextRound();
-    }
-
-    private void wage(Player activePlayer, int wager) {
-        roundWagers.put(activePlayer, wager);
-    }
 
     public void raise(int wager) {
         Player activePlayer = awaitingPlayers.poll();
-
-        setCurrentBid(wager);
-        putInPot(this.currentBid);
-        wage(activePlayer, roundWagers.get(activePlayer) + this.currentBid);
-        awaiting(activePlayer);
-
+        new Raise().execute(this, activePlayer, wager);
         playersTookAction.add(activePlayer);
         nextRound();
     }
 
-    private void putInPot(int currentBid) {
+    public void wage(Player activePlayer, int wager) {
+        roundWagers.put(activePlayer, wager);
+    }
+
+    public Integer getPlayerCurrentWager(Player activePlayer) {
+        return roundWagers.get(activePlayer);
+    }
+
+    public void putInPot(int currentBid) {
         this.pot += currentBid;
     }
 
-    private void setCurrentBid(int wager) {
+    public void setCurrentBid(int wager) {
         this.currentBid = wager;
     }
 
