@@ -1,8 +1,10 @@
+import domain.Action;
 import domain.Bet;
 import domain.Fold;
 import domain.Game;
 import domain.Pass;
 import domain.Player;
+import domain.Raise;
 import domain.Round;
 import org.junit.jupiter.api.Test;
 
@@ -83,7 +85,7 @@ public class GameTest {
         game.execute(new Bet());
 
         assertEquals("c", game.getActivePlayer().getName());
-        game.raise(2);
+        game.execute(new Raise(), 2);
 
         assertEquals(Round.PREFLOP, game.getCurrentRound());
         assertEquals("a", game.getActivePlayer().getName());
@@ -106,7 +108,7 @@ public class GameTest {
 
 
         assertEquals("c", game.getActivePlayer().getName());
-        game.raise(3);
+        game.execute(new Raise(), 3);
 
         assertEquals(3, game.getCurrentBid());
         int pot = game.getPot();

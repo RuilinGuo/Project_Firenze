@@ -62,14 +62,6 @@ public class Game {
         awaitingPlayers.offer(activePlayer);
     }
 
-
-    public void raise(int wager) {
-        Player activePlayer = awaitingPlayers.poll();
-        new Raise().execute(this, activePlayer, wager);
-        playersTookAction.add(activePlayer);
-        nextRound();
-    }
-
     public void wage(Player activePlayer, int wager) {
         roundWagers.put(activePlayer, wager);
     }
@@ -88,6 +80,13 @@ public class Game {
 
     public void execute(Action action) {
         Player activePlayer = awaitingPlayers.poll();
+        action.execute(this, activePlayer);
+        playersTookAction.add(activePlayer);
+        nextRound();
+    }
+    public void execute(Action action, Integer wager) {
+        Player activePlayer = awaitingPlayers.poll();
+        setCurrentBid(wager);
         action.execute(this, activePlayer);
         playersTookAction.add(activePlayer);
         nextRound();
