@@ -1,6 +1,10 @@
-package domain;
+package domain.action;
 
-public class Raise implements Action{
+import domain.Game;
+import domain.Player;
+import domain.action.Action;
+
+public class Raise implements Action {
     @Override
     public void execute(Game game, Player activePlayer) {
         game.putInPot(game.getCurrentBid());

@@ -1,10 +1,9 @@
-import domain.Action;
-import domain.Bet;
-import domain.Fold;
+import domain.action.Bet;
+import domain.action.Fold;
 import domain.Game;
-import domain.Pass;
+import domain.action.Pass;
 import domain.Player;
-import domain.Raise;
+import domain.action.Raise;
 import domain.Round;
 import org.junit.jupiter.api.Test;
 
@@ -145,4 +144,6 @@ public class GameTest {
         assertEquals(Round.FLOP, game.getCurrentRound());
         assertEquals("b", game.getActivePlayer().getName());
     }
+
+
 }
