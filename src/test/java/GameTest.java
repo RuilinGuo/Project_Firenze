@@ -72,6 +72,7 @@ public class GameTest {
         assertEquals(Round.FLOP, game.getCurrentRound());
         assertEquals("a",game.getActivePlayer().getName());
         assertEquals(false, game.getActivePlayer().isTookAction());
+        assertEquals(0, game.getCurrentBid());
     }
 
     @Test
@@ -146,4 +147,16 @@ public class GameTest {
     }
 
 
+    @Test
+    void should() {
+        Game game = new Game(new Player("a"), new Player("b"), new Player("c"));
+
+        assertEquals("a", game.getActivePlayer().getName());
+        game.execute(new Bet());
+        assertEquals("b", game.getActivePlayer().getName());
+        game.execute(new Bet());
+        assertEquals("c", game.getActivePlayer().getName());
+        game.execute(new Bet());
+
+    }
 }

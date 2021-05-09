@@ -64,6 +64,7 @@ public class Game {
                 activePlayers.stream().allMatch(player -> getPlayerCurrentWager(player) == currentBid)) {
             currentRound = Round.values()[currentRound.ordinal() + 1];
             resetAllPlayersAction();
+            setCurrentBid(0);
         }
     }
 
