@@ -1,6 +1,7 @@
 package domain;
 
 import domain.action.Action;
+import domain.poker.Poker;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -18,6 +19,7 @@ public class Game {
     private int currentBid;
     private Player[] players;
     private Map<Player, Integer> roundWagers;
+    private Poker poker;
 
 
     public Game(Player... players) {
@@ -102,5 +104,13 @@ public class Game {
 
     public void inactive(Player activePlayer) {
         activePlayers.remove(activePlayer);
+    }
+
+    public void setPoker(Poker poker) {
+        this.poker = poker;
+    }
+
+    public void dealCardsToAllPlayer() {
+        activePlayers.forEach(item -> item.drawCards(this.poker));
     }
 }

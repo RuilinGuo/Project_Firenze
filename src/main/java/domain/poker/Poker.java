@@ -34,7 +34,16 @@ public class Poker {
     private void exchange(int indexOfCard1, int indexOfCard2) {
         Card temp;
         temp = deck.get(indexOfCard1);
-        deck.set(indexOfCard1,deck.get(indexOfCard2));
-        deck.set(indexOfCard2,temp);
+        deck.set(indexOfCard1, deck.get(indexOfCard2));
+        deck.set(indexOfCard2, temp);
+    }
+
+    public List<Card> drawCards(int i) {
+        List<Card> cards = new ArrayList<>();
+        for (int j = 0; j < i; j++) {
+            cards.add(this.deck.get(j));
+        }
+        deck.removeAll(cards);
+        return cards;
     }
 }
