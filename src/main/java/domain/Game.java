@@ -1,15 +1,20 @@
 package domain;
 
 import domain.action.Action;
+import domain.poker.Card;
 import domain.poker.Poker;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
+
+import static domain.Round.SHOWDOWN;
 
 public class Game {
     private Round currentRound;
@@ -19,6 +24,7 @@ public class Game {
     private int currentBid;
     private Player[] players;
     private Map<Player, Integer> roundWagers;
+    private List<Card> publicCard;
     private Poker poker;
 
 
@@ -30,6 +36,7 @@ public class Game {
         this.currentRound = Round.PREFLOP;
         this.roundWagers = new HashMap<>();
         this.activePlayers = new HashSet<>(Arrays.asList(players));
+        this.publicCard = new ArrayList<>();
 
         Arrays.stream(players).forEach(item -> roundWagers.put(item, 0));
     }
@@ -64,6 +71,13 @@ public class Game {
     private void nextRound() {
         if (activePlayers.stream().allMatch(Player::isTookAction) &&
                 activePlayers.stream().allMatch(player -> getPlayerCurrentWager(player) == currentBid)) {
+            if (currentRound.equals(Round.PREFLOP)) {
+                addPublicCards(3);
+            } else if (currentRound.equals(SHOWDOWN)) {
+                addPublicCards(0);
+            }else {
+                addPublicCards(1);
+            }
             currentRound = Round.values()[currentRound.ordinal() + 1];
             resetAllPlayersAction();
             setCurrentBid(0);
@@ -112,5 +126,13 @@ public class Game {
 
     public void dealCardsToAllPlayer() {
         activePlayers.forEach(item -> item.drawCards(this.poker));
+    }
+
+    public void addPublicCards(int i) {
+        this.publicCard.addAll(poker.drawCards(i));
+    }
+
+    public List<Card> getPublicCard() {
+        return publicCard;
     }
 }

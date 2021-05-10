@@ -1,5 +1,6 @@
 import domain.Game;
 import domain.Player;
+import domain.action.Pass;
 import domain.poker.Card;
 import domain.poker.Poker;
 import org.junit.jupiter.api.Assertions;
@@ -31,4 +32,29 @@ public class PokerTest {
 
         Assertions.assertEquals(2, game.getActivePlayer().getHandCards().size());
     }
+
+    @Test
+    void should_add_public_card_when_enter_next_round() {
+        Poker poker = new Poker();
+        poker.exchangeShuffle();
+
+        Game game = new Game(new Player("a"), new Player("b"));
+
+        game.setPoker(poker);
+        game.dealCardsToAllPlayer();
+        Assertions.assertEquals(0, game.getPublicCard().size());
+
+        game.execute(new Pass());
+        game.execute(new Pass());
+        Assertions.assertEquals(3, game.getPublicCard().size());
+
+        game.execute(new Pass());
+        game.execute(new Pass());
+        Assertions.assertEquals(4, game.getPublicCard().size());
+
+        game.execute(new Pass());
+        game.execute(new Pass());
+        Assertions.assertEquals(5, game.getPublicCard().size());
+    }
+
 }
