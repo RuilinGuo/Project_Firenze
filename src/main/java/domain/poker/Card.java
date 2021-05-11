@@ -15,13 +15,17 @@ public class Card implements Comparable {
         return point;
     }
 
+    public Integer getPointNumber(){
+        return point.getPoint();
+    }
+
     public Suit getSuit() {
         return suit;
     }
 
     @Override
     public int compareTo(Object o) {
-        return Integer.compare(this.point.ordinal(), ((Card) o).getPoint().ordinal());
+        return Integer.compare(this.point.getPoint(), ((Card) o).getPoint().getPoint());
     }
 
     @Override
