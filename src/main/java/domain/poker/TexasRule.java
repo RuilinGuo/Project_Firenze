@@ -9,6 +9,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static domain.poker.Ranking.FLUSH;
+import static domain.poker.Ranking.FOUR_OF_THE_KIND;
 import static domain.poker.Ranking.FULL_HOUSE;
 import static domain.poker.Ranking.HIGH_CARD;
 import static domain.poker.Ranking.ONE_PAIR;
@@ -27,6 +28,9 @@ public class TexasRule {
     }
 
     public Ranking getRanking() {
+        if(isFourOfTheKind()){
+            return FOUR_OF_THE_KIND;
+        }
         if(isFullHouse()){
             return FULL_HOUSE;
         }
@@ -49,6 +53,21 @@ public class TexasRule {
             return HIGH_CARD;
         }
         return null;
+    }
+
+    private boolean isFourOfTheKind() {
+        Map<Point, Integer> cardsRankCountMap = getCardsRankCountMap();
+        boolean isFourOfTheKind = false;
+
+        Iterator<Map.Entry<Point, Integer>> it = cardsRankCountMap.entrySet().iterator();
+        while (it.hasNext()) {
+            if (it.next().getValue() == HAND_CARD_NUMBERS - 1) {
+                isFourOfTheKind = true;
+                break;
+            }
+        }
+
+        return isFourOfTheKind;
     }
 
     private boolean isFullHouse() {
