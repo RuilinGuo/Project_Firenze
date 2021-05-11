@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static domain.poker.Ranking.FLUSH;
+import static domain.poker.Ranking.FULL_HOUSE;
 import static domain.poker.Ranking.HIGH_CARD;
 import static domain.poker.Ranking.ONE_PAIR;
 import static domain.poker.Ranking.STRAIGHT;
@@ -25,6 +27,12 @@ public class TexasRule {
     }
 
     public Ranking getRanking() {
+        if(isFullHouse()){
+            return FULL_HOUSE;
+        }
+        if(isFlush()){
+            return FLUSH;
+        }
         if(isStraight()){
             return STRAIGHT;
         }
@@ -41,6 +49,29 @@ public class TexasRule {
             return HIGH_CARD;
         }
         return null;
+    }
+
+    private boolean isFullHouse() {
+        Map<Point, Integer> cardsRankCountMap = getCardsRankCountMap();
+
+        boolean isFullHouse = false;
+
+        if (cardsRankCountMap.size() == 2) {
+            Iterator<Map.Entry<Point, Integer>> it = cardsRankCountMap.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry<Point, Integer> next = it.next();
+                if (next.getValue() == 2 || next.getValue() == 3) {
+                    isFullHouse = true;
+                    break;
+                }
+            }
+        }
+        return isFullHouse;
+    }
+
+    private boolean isFlush() {
+        // 如果是同色
+        return this.isSameSuit(cards);
     }
 
     private boolean isStraight() {
