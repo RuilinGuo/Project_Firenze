@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import static domain.poker.Ranking.HIGH_CARD;
 import static domain.poker.Ranking.ONE_PAIR;
+import static domain.poker.Ranking.STRAIGHT;
 import static domain.poker.Ranking.THREE_OF_THE_KIND;
 import static domain.poker.Ranking.TWO_PAIR;
 
@@ -24,6 +25,9 @@ public class TexasRule {
     }
 
     public Ranking getRanking() {
+        if(isStraight()){
+            return STRAIGHT;
+        }
         if(isThreeOfTheKind()){
             return THREE_OF_THE_KIND;
         }
@@ -37,6 +41,27 @@ public class TexasRule {
             return HIGH_CARD;
         }
         return null;
+    }
+
+    private boolean isStraight() {
+        if (!this.isSameSuit(cards)) { // 如果是同色
+            boolean isStraight = true;
+            Card previousCard = null;
+            for (Card card : cards) {
+                if (previousCard != null) {
+                    if (card.getPointNumber() - previousCard.getPointNumber() != -1) {
+                        isStraight = false;
+                        break;
+                    }
+                }
+                previousCard = card;
+            }
+            if (isStraight == true) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private boolean isThreeOfTheKind() {

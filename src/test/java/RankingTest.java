@@ -9,6 +9,7 @@ import java.util.List;
 
 import static domain.poker.Ranking.HIGH_CARD;
 import static domain.poker.Ranking.ONE_PAIR;
+import static domain.poker.Ranking.STRAIGHT;
 import static domain.poker.Ranking.THREE_OF_THE_KIND;
 import static domain.poker.Ranking.TWO_PAIR;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -73,5 +74,20 @@ public class RankingTest {
         TexasRule texasRule = new TexasRule();
         texasRule.setCards(cards);
         assertEquals(THREE_OF_THE_KIND, texasRule.getRanking());
+    }
+
+    @Test
+    void should_give_STRAIGHT_ranking() {
+        Card card1 = new Card(Suit.HEART, Point.FOUR);
+        Card card2 = new Card(Suit.DIAMOND, Point.FIVE);
+        Card card3 = new Card(Suit.SPADE, Point.SIX);
+        Card card4 = new Card(Suit.SPADE, Point.SEVEN);
+        Card card5 = new Card(Suit.DIAMOND, Point.EIGHT);
+
+        List<Card> cards = Arrays.asList(card1, card2, card3, card4, card5);
+
+        TexasRule texasRule = new TexasRule();
+        texasRule.setCards(cards);
+        assertEquals(STRAIGHT, texasRule.getRanking());
     }
 }
