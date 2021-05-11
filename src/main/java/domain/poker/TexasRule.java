@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import static domain.poker.Ranking.HIGH_CARD;
 import static domain.poker.Ranking.ONE_PAIR;
+import static domain.poker.Ranking.THREE_OF_THE_KIND;
 import static domain.poker.Ranking.TWO_PAIR;
 
 public class TexasRule {
@@ -23,16 +24,35 @@ public class TexasRule {
     }
 
     public Ranking getRanking() {
-        if (isHighCard()){
-            return HIGH_CARD;
-        }
-        if(isOnePair()){
-            return ONE_PAIR;
+        if(isThreeOfTheKind()){
+            return THREE_OF_THE_KIND;
         }
         if(isTwoPair()){
             return TWO_PAIR;
         }
+        if(isOnePair()){
+            return ONE_PAIR;
+        }
+        if (isHighCard()){
+            return HIGH_CARD;
+        }
         return null;
+    }
+
+    private boolean isThreeOfTheKind() {
+
+        Map<Point, Integer> cardsRankCountMap = getCardsRankCountMap();
+
+        boolean isThreeOfTheKind = false;
+
+        Iterator<Map.Entry<Point, Integer>> it = cardsRankCountMap.entrySet().iterator();
+        while (it.hasNext()) {
+            if (it.next().getValue() == 3) {
+                isThreeOfTheKind = true;
+                break;
+            }
+        }
+        return isThreeOfTheKind;
     }
 
     private boolean isTwoPair() {
