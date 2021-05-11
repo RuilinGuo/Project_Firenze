@@ -1,5 +1,6 @@
 package domain.poker;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -13,7 +14,9 @@ import static domain.poker.Ranking.FOUR_OF_THE_KIND;
 import static domain.poker.Ranking.FULL_HOUSE;
 import static domain.poker.Ranking.HIGH_CARD;
 import static domain.poker.Ranking.ONE_PAIR;
+import static domain.poker.Ranking.ROYAL_FLUSH;
 import static domain.poker.Ranking.STRAIGHT;
+import static domain.poker.Ranking.STRAIGHT_FLUSH;
 import static domain.poker.Ranking.THREE_OF_THE_KIND;
 import static domain.poker.Ranking.TWO_PAIR;
 
@@ -28,31 +31,73 @@ public class TexasRule {
     }
 
     public Ranking getRanking() {
-        if(isFourOfTheKind()){
+        if (isRoyalFlush()) {
+            return ROYAL_FLUSH;
+        }
+        if (isStraightFlush()) {
+            return STRAIGHT_FLUSH;
+        }
+        if (isFourOfTheKind()) {
             return FOUR_OF_THE_KIND;
         }
-        if(isFullHouse()){
+        if (isFullHouse()) {
             return FULL_HOUSE;
         }
-        if(isFlush()){
+        if (isFlush()) {
             return FLUSH;
         }
-        if(isStraight()){
+        if (isStraight()) {
             return STRAIGHT;
         }
-        if(isThreeOfTheKind()){
+        if (isThreeOfTheKind()) {
             return THREE_OF_THE_KIND;
         }
-        if(isTwoPair()){
+        if (isTwoPair()) {
             return TWO_PAIR;
         }
-        if(isOnePair()){
+        if (isOnePair()) {
             return ONE_PAIR;
         }
-        if (isHighCard()){
+        if (isHighCard()) {
             return HIGH_CARD;
         }
         return null;
+    }
+
+    private boolean isRoyalFlush() {
+        Map<Point, Integer> cardsRankCountMap = getCardsRankCountMap();
+
+        if (this.isSameSuit(cards)) {
+            if (cardsRankCountMap.containsKey(Point.TEN)
+                    && cardsRankCountMap.containsKey(Point.JACK)
+                    && cardsRankCountMap.containsKey(Point.QUEEN)
+                    && cardsRankCountMap.containsKey(Point.KING)
+                    && cardsRankCountMap.containsKey(Point.ACE)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isStraightFlush() {
+        boolean isStraightFlush = false;
+        if (this.isSameSuit(cards)) {
+            isStraightFlush = true;
+            Card previousCard = null;
+            for (Card card : cards) {
+                if (previousCard != null) {
+                    if (card.getPointNumber() - previousCard.getPointNumber() != -1) {
+                        isStraightFlush = false;
+                        break;
+                    }
+                }
+                previousCard = card;
+            }
+            if (isStraightFlush) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean isFourOfTheKind() {
@@ -89,12 +134,11 @@ public class TexasRule {
     }
 
     private boolean isFlush() {
-        // 如果是同色
         return this.isSameSuit(cards);
     }
 
     private boolean isStraight() {
-        if (!this.isSameSuit(cards)) { // 如果是同色
+        if (!this.isSameSuit(cards)) {
             boolean isStraight = true;
             Card previousCard = null;
             for (Card card : cards) {
@@ -106,7 +150,7 @@ public class TexasRule {
                 }
                 previousCard = card;
             }
-            if (isStraight == true) {
+            if (isStraight) {
                 return true;
             }
         }
