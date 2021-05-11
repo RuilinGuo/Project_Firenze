@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import static domain.poker.Ranking.HIGH_CARD;
 import static domain.poker.Ranking.ONE_PAIR;
+import static domain.poker.Ranking.TWO_PAIR;
 
 public class TexasRule {
     private static final Integer HAND_CARD_NUMBERS = 5;
@@ -28,7 +29,30 @@ public class TexasRule {
         if(isOnePair()){
             return ONE_PAIR;
         }
+        if(isTwoPair()){
+            return TWO_PAIR;
+        }
         return null;
+    }
+
+    private boolean isTwoPair() {
+
+        Map<Point, Integer> cardsRankCountMap = getCardsRankCountMap();
+
+        boolean isTwoPair = false;
+
+        if (cardsRankCountMap.size() == 3) {
+            Iterator<Map.Entry<Point, Integer>> it = cardsRankCountMap.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry<Point, Integer> next = it.next();
+                if (next.getValue() == 2 || next.getValue() == 1) {
+                    isTwoPair = true;
+                    break;
+                }
+            }
+        }
+
+        return isTwoPair;
     }
 
     private boolean isOnePair() {
