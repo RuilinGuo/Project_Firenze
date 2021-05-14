@@ -61,6 +61,7 @@ public class TexasRule {
 
     private boolean isRoyalFlush() {
         Map<Point, Integer> cardsRankCountMap = getCardsRankCountMap();
+        List<Card> cards = this.cards;
 
         if (this.isSameSuit(cards)) {
             return cardsRankCountMap.containsKey(Point.TEN)
@@ -73,6 +74,8 @@ public class TexasRule {
     }
 
     private boolean isStraightFlush() {
+        List<Card> cards = this.cards;
+
         if (this.isSameSuit(cards)) {
             return isJustStraight();
         }
@@ -80,6 +83,8 @@ public class TexasRule {
     }
 
     private boolean isStraight() {
+        List<Card> cards = this.cards;
+
         if (!this.isSameSuit(cards)) {
             return isJustStraight();
         }
@@ -87,88 +92,75 @@ public class TexasRule {
     }
 
     private boolean isJustStraight() {
-        boolean isStraight = true;
+        List<Card> cards = this.cards;
+
         Card previousCard = null;
         for (Card card : cards) {
             if (previousCard != null) {
                 if (card.getPointNumber() - previousCard.getPointNumber() != -1) {
-                    isStraight = false;
-                    break;
+                    return false;
                 }
             }
             previousCard = card;
         }
-        return isStraight;
+        return true;
     }
 
     private boolean isFourOfTheKind() {
         Map<Point, Integer> cardsRankCountMap = getCardsRankCountMap();
-        boolean isFourOfTheKind = false;
 
         for (Map.Entry<Point, Integer> pointIntegerEntry : cardsRankCountMap.entrySet()) {
             if (pointIntegerEntry.getValue() == 4) {
-                isFourOfTheKind = true;
-                break;
+                return true;
             }
         }
-
-        return isFourOfTheKind;
+        return false;
     }
 
     private boolean isFullHouse() {
         Map<Point, Integer> cardsRankCountMap = getCardsRankCountMap();
 
-        boolean isFullHouse = false;
-
         if (cardsRankCountMap.size() == 2) {
             for (Map.Entry<Point, Integer> next : cardsRankCountMap.entrySet()) {
                 if (next.getValue() == 2 || next.getValue() == 3) {
-                    isFullHouse = true;
-                    break;
+                    return true;
                 }
             }
         }
-        return isFullHouse;
+        return false;
     }
 
     private boolean isFlush() {
+        List<Card> cards = this.cards;
+
         return this.isSameSuit(cards);
     }
 
     private boolean isThreeOfTheKind() {
-
         Map<Point, Integer> cardsRankCountMap = getCardsRankCountMap();
-
-        boolean isThreeOfTheKind = false;
 
         for (Map.Entry<Point, Integer> pointIntegerEntry : cardsRankCountMap.entrySet()) {
             if (pointIntegerEntry.getValue() == 3) {
-                isThreeOfTheKind = true;
-                break;
+                return true;
             }
         }
-        return isThreeOfTheKind;
+        return false;
     }
 
     private boolean isTwoPair() {
-
         Map<Point, Integer> cardsRankCountMap = getCardsRankCountMap();
 
         boolean isTwoPair = false;
-
         if (cardsRankCountMap.size() == 3) {
             isTwoPair = isPair(cardsRankCountMap);
         }
-
         return isTwoPair;
     }
 
     private boolean isOnePair() {
-
         Map<Point, Integer> cardsRankCountMap = getCardsRankCountMap();
 
         boolean isOnePair = false;
-
         if (cardsRankCountMap.size() == 4) {
             isOnePair = isPair(cardsRankCountMap);
         }
@@ -189,21 +181,20 @@ public class TexasRule {
     public boolean isHighCard() {
         Map<Point, Integer> cardsRankCountMap = getCardsRankCountMap();
 
-        boolean isHighCard = false;
-
         if (cardsRankCountMap.size() == 5) {
             if (!this.isSameSuit(cards)) {
                 if (cardsRankCountMap.keySet().size() == 5) {
-                    isHighCard = true;
+                    return true;
                 }
             }
         }
-
-        return isHighCard;
+        return false;
     }
 
     public Map<Point, Integer> getCardsRankCountMap() {
         Map<Point, Integer> rankCount = new HashMap<>();
+        List<Card> cards = this.cards;
+
         for (Card card : cards) {
             if (!rankCount.containsKey(card.getPoint())) {
                 rankCount.put(card.getPoint(), 1);
