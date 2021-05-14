@@ -11,7 +11,6 @@ import static domain.poker.Ranking.FOUR_OF_THE_KIND;
 import static domain.poker.Ranking.FULL_HOUSE;
 import static domain.poker.Ranking.HIGH_CARD;
 import static domain.poker.Ranking.ONE_PAIR;
-import static domain.poker.Ranking.ROYAL_FLUSH;
 import static domain.poker.Ranking.STRAIGHT;
 import static domain.poker.Ranking.STRAIGHT_FLUSH;
 import static domain.poker.Ranking.THREE_OF_THE_KIND;
@@ -21,13 +20,18 @@ public class TexasRule {
 
     private List<Card> cards;
 
+    public List<Card> getCards() {
+        return cards;
+    }
+
     public void setCards(List<Card> cards) {
         this.cards = cards.stream().sorted(Comparator.comparing(Card::getPointNumber).reversed()).collect(Collectors.toList());
     }
 
     public Ranking getRanking() {
-        if (isRoyalFlush()) {
-            return ROYAL_FLUSH;
+        RoyalFlush royalFlush = new RoyalFlush();
+        if (royalFlush.isTrue(this)) {
+            return royalFlush.getRanking();
         }
         if (isStraightFlush()) {
             return STRAIGHT_FLUSH;
@@ -57,20 +61,6 @@ public class TexasRule {
             return HIGH_CARD;
         }
         return null;
-    }
-
-    private boolean isRoyalFlush() {
-        Map<Point, Integer> cardsRankCountMap = getCardsRankCountMap();
-        List<Card> cards = this.cards;
-
-        if (this.isSameSuit(cards)) {
-            return cardsRankCountMap.containsKey(Point.TEN)
-                    && cardsRankCountMap.containsKey(Point.JACK)
-                    && cardsRankCountMap.containsKey(Point.QUEEN)
-                    && cardsRankCountMap.containsKey(Point.KING)
-                    && cardsRankCountMap.containsKey(Point.ACE);
-        }
-        return false;
     }
 
     private boolean isStraightFlush() {
@@ -168,16 +158,6 @@ public class TexasRule {
         return isOnePair;
     }
 
-    private boolean isPair(Map<Point, Integer> cardsRankCountMap) {
-        for (Map.Entry<Point, Integer> next : cardsRankCountMap.entrySet()) {
-            if (next.getValue() == 2 || next.getValue() == 1) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-
     public boolean isHighCard() {
         Map<Point, Integer> cardsRankCountMap = getCardsRankCountMap();
 
@@ -186,6 +166,15 @@ public class TexasRule {
                 if (cardsRankCountMap.keySet().size() == 5) {
                     return true;
                 }
+            }
+        }
+        return false;
+    }
+
+    private boolean isPair(Map<Point, Integer> cardsRankCountMap) {
+        for (Map.Entry<Point, Integer> next : cardsRankCountMap.entrySet()) {
+            if (next.getValue() == 2 || next.getValue() == 1) {
+                return true;
             }
         }
         return false;
@@ -205,7 +194,7 @@ public class TexasRule {
         return rankCount;
     }
 
-    private boolean isSameSuit(List<Card> cards) {
+    public boolean isSameSuit(List<Card> cards) {
         Suit suit = cards.get(0).getSuit();
         return cards.stream().allMatch(item -> item.getSuit().equals(suit));
     }
