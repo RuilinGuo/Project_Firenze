@@ -67,7 +67,7 @@ public class TexasRule {
         List<Card> cards = this.cards;
 
         if (this.isSameSuit(cards)) {
-            return isJustStraight();
+            return isBasicStraight();
         }
         return false;
     }
@@ -76,12 +76,12 @@ public class TexasRule {
         List<Card> cards = this.cards;
 
         if (!this.isSameSuit(cards)) {
-            return isJustStraight();
+            return isBasicStraight();
         }
         return false;
     }
 
-    private boolean isJustStraight() {
+    private boolean isBasicStraight() {
         List<Card> cards = this.cards;
 
         Card previousCard = null;
