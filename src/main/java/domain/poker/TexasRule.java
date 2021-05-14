@@ -66,45 +66,50 @@ public class TexasRule {
         Map<Point, Integer> cardsRankCountMap = getCardsRankCountMap();
 
         if (this.isSameSuit(cards)) {
-            if (cardsRankCountMap.containsKey(Point.TEN)
+            return cardsRankCountMap.containsKey(Point.TEN)
                     && cardsRankCountMap.containsKey(Point.JACK)
                     && cardsRankCountMap.containsKey(Point.QUEEN)
                     && cardsRankCountMap.containsKey(Point.KING)
-                    && cardsRankCountMap.containsKey(Point.ACE)) {
-                return true;
-            }
+                    && cardsRankCountMap.containsKey(Point.ACE);
         }
         return false;
     }
 
     private boolean isStraightFlush() {
-        boolean isStraightFlush = false;
         if (this.isSameSuit(cards)) {
-            isStraightFlush = true;
-            Card previousCard = null;
-            for (Card card : cards) {
-                if (previousCard != null) {
-                    if (card.getPointNumber() - previousCard.getPointNumber() != -1) {
-                        isStraightFlush = false;
-                        break;
-                    }
-                }
-                previousCard = card;
-            }
-            if (isStraightFlush) {
-                return true;
-            }
+            return isJustStraight();
         }
         return false;
+    }
+
+    private boolean isStraight() {
+        if (!this.isSameSuit(cards)) {
+            return isJustStraight();
+        }
+        return false;
+    }
+
+    private boolean isJustStraight() {
+        boolean isStraight = true;
+        Card previousCard = null;
+        for (Card card : cards) {
+            if (previousCard != null) {
+                if (card.getPointNumber() - previousCard.getPointNumber() != -1) {
+                    isStraight = false;
+                    break;
+                }
+            }
+            previousCard = card;
+        }
+        return isStraight;
     }
 
     private boolean isFourOfTheKind() {
         Map<Point, Integer> cardsRankCountMap = getCardsRankCountMap();
         boolean isFourOfTheKind = false;
 
-        Iterator<Map.Entry<Point, Integer>> it = cardsRankCountMap.entrySet().iterator();
-        while (it.hasNext()) {
-            if (it.next().getValue() == HAND_CARD_NUMBERS - 1) {
+        for (Map.Entry<Point, Integer> pointIntegerEntry : cardsRankCountMap.entrySet()) {
+            if (pointIntegerEntry.getValue() == HAND_CARD_NUMBERS - 1) {
                 isFourOfTheKind = true;
                 break;
             }
@@ -119,9 +124,7 @@ public class TexasRule {
         boolean isFullHouse = false;
 
         if (cardsRankCountMap.size() == 2) {
-            Iterator<Map.Entry<Point, Integer>> it = cardsRankCountMap.entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry<Point, Integer> next = it.next();
+            for (Map.Entry<Point, Integer> next : cardsRankCountMap.entrySet()) {
                 if (next.getValue() == 2 || next.getValue() == 3) {
                     isFullHouse = true;
                     break;
@@ -135,36 +138,14 @@ public class TexasRule {
         return this.isSameSuit(cards);
     }
 
-    private boolean isStraight() {
-        if (!this.isSameSuit(cards)) {
-            boolean isStraight = true;
-            Card previousCard = null;
-            for (Card card : cards) {
-                if (previousCard != null) {
-                    if (card.getPointNumber() - previousCard.getPointNumber() != -1) {
-                        isStraight = false;
-                        break;
-                    }
-                }
-                previousCard = card;
-            }
-            if (isStraight) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     private boolean isThreeOfTheKind() {
 
         Map<Point, Integer> cardsRankCountMap = getCardsRankCountMap();
 
         boolean isThreeOfTheKind = false;
 
-        Iterator<Map.Entry<Point, Integer>> it = cardsRankCountMap.entrySet().iterator();
-        while (it.hasNext()) {
-            if (it.next().getValue() == 3) {
+        for (Map.Entry<Point, Integer> pointIntegerEntry : cardsRankCountMap.entrySet()) {
+            if (pointIntegerEntry.getValue() == 3) {
                 isThreeOfTheKind = true;
                 break;
             }
@@ -199,9 +180,7 @@ public class TexasRule {
     }
 
     private boolean isPair(Map<Point, Integer> cardsRankCountMap) {
-        Iterator<Map.Entry<Point, Integer>> it = cardsRankCountMap.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry<Point, Integer> next = it.next();
+        for (Map.Entry<Point, Integer> next : cardsRankCountMap.entrySet()) {
             if (next.getValue() == 2 || next.getValue() == 1) {
                 return true;
             }
@@ -227,7 +206,7 @@ public class TexasRule {
     }
 
     public Map<Point, Integer> getCardsRankCountMap() {
-        Map<Point, Integer> rankCount = new HashMap<Point, Integer>();
+        Map<Point, Integer> rankCount = new HashMap<>();
         for (Card card : cards) {
             if (!rankCount.containsKey(card.getPoint())) {
                 rankCount.put(card.getPoint(), 1);
