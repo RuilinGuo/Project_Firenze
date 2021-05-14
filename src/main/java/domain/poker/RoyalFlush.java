@@ -5,7 +5,7 @@ import java.util.Map;
 
 import static domain.poker.Ranking.ROYAL_FLUSH;
 
-public class RoyalFlush {
+public class RoyalFlush implements RankingInterface{
     public boolean isTrue(TexasRule texasRule) {
         Map<Point, Integer> cardsRankCountMap = texasRule.getCardsRankCountMap();
         List<Card> cards = texasRule.getCards();
