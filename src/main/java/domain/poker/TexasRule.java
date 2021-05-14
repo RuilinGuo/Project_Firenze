@@ -179,14 +179,7 @@ public class TexasRule {
         boolean isTwoPair = false;
 
         if (cardsRankCountMap.size() == 3) {
-            Iterator<Map.Entry<Point, Integer>> it = cardsRankCountMap.entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry<Point, Integer> next = it.next();
-                if (next.getValue() == 2 || next.getValue() == 1) {
-                    isTwoPair = true;
-                    break;
-                }
-            }
+            isTwoPair = isPair(cardsRankCountMap);
         }
 
         return isTwoPair;
@@ -199,17 +192,21 @@ public class TexasRule {
         boolean isOnePair = false;
 
         if (cardsRankCountMap.size() == 4) {
-            Iterator<Map.Entry<Point, Integer>> it = cardsRankCountMap.entrySet().iterator();
-            while (it.hasNext()) {
-                Map.Entry<Point, Integer> next = it.next();
-                if (next.getValue() == 2 || next.getValue() == 1) {
-                    isOnePair = true;
-                    break;
-                }
-            }
+            isOnePair = isPair(cardsRankCountMap);
         }
 
         return isOnePair;
+    }
+
+    private boolean isPair(Map<Point, Integer> cardsRankCountMap) {
+        Iterator<Map.Entry<Point, Integer>> it = cardsRankCountMap.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<Point, Integer> next = it.next();
+            if (next.getValue() == 2 || next.getValue() == 1) {
+                return true;
+            }
+        }
+        return false;
     }
 
 
@@ -229,11 +226,6 @@ public class TexasRule {
         return isHighCard;
     }
 
-    private boolean isSameSuit(List<Card> cards) {
-        Suit suit = cards.get(0).getSuit();
-        return cards.stream().allMatch(item -> item.getSuit().equals(suit));
-    }
-
     public Map<Point, Integer> getCardsRankCountMap() {
         Map<Point, Integer> rankCount = new HashMap<Point, Integer>();
         for (Card card : cards) {
@@ -244,5 +236,10 @@ public class TexasRule {
             }
         }
         return rankCount;
+    }
+
+    private boolean isSameSuit(List<Card> cards) {
+        Suit suit = cards.get(0).getSuit();
+        return cards.stream().allMatch(item -> item.getSuit().equals(suit));
     }
 }

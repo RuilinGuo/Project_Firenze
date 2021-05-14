@@ -171,4 +171,8 @@ public class RankingTest {
         assertEquals(ROYAL_FLUSH, texasRule.getRanking());
     }
 
+    @Test
+    void should_compare_same_ranking() {
+        
+    }
 }
