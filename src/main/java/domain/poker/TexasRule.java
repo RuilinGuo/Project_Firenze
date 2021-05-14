@@ -2,7 +2,6 @@ package domain.poker;
 
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -19,10 +18,8 @@ import static domain.poker.Ranking.THREE_OF_THE_KIND;
 import static domain.poker.Ranking.TWO_PAIR;
 
 public class TexasRule {
-    private static final Integer HAND_CARD_NUMBERS = 5;
 
     private List<Card> cards;
-    private int value;
 
     public void setCards(List<Card> cards) {
         this.cards = cards.stream().sorted(Comparator.comparing(Card::getPointNumber).reversed()).collect(Collectors.toList());
@@ -109,7 +106,7 @@ public class TexasRule {
         boolean isFourOfTheKind = false;
 
         for (Map.Entry<Point, Integer> pointIntegerEntry : cardsRankCountMap.entrySet()) {
-            if (pointIntegerEntry.getValue() == HAND_CARD_NUMBERS - 1) {
+            if (pointIntegerEntry.getValue() == 4) {
                 isFourOfTheKind = true;
                 break;
             }
@@ -194,9 +191,9 @@ public class TexasRule {
 
         boolean isHighCard = false;
 
-        if (cardsRankCountMap.size() == HAND_CARD_NUMBERS) {
+        if (cardsRankCountMap.size() == 5) {
             if (!this.isSameSuit(cards)) {
-                if (cardsRankCountMap.keySet().size() == HAND_CARD_NUMBERS) {
+                if (cardsRankCountMap.keySet().size() == 5) {
                     isHighCard = true;
                 }
             }
