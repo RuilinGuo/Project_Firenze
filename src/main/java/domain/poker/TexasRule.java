@@ -1,5 +1,7 @@
 package domain.poker;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -7,7 +9,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static domain.poker.Ranking.FLUSH;
-import static domain.poker.Ranking.FULL_HOUSE;
 import static domain.poker.Ranking.HIGH_CARD;
 import static domain.poker.Ranking.ONE_PAIR;
 import static domain.poker.Ranking.STRAIGHT;
@@ -28,152 +29,24 @@ public class TexasRule {
 
     public Ranking getRanking() {
         RoyalFlush royalFlush = new RoyalFlush();
-        if (royalFlush.isTrue(getCardsRankCountMap(), getCards())) {
-            return royalFlush.getRanking();
-        }
-
         StraightFlush straightFlush = new StraightFlush();
-        if (straightFlush.isTrue(getCardsRankCountMap(), getCards())) {
-            return straightFlush.getRanking();
-        }
         FourOfTheKind fourOfTheKind = new FourOfTheKind();
-        if (fourOfTheKind.isTrue(getCardsRankCountMap(), getCards())) {
-            return fourOfTheKind.getRanking();
-        }
         FullHouse fullHouse = new FullHouse();
-        if (fullHouse.isTrue(getCardsRankCountMap(), getCards())) {
-            return fullHouse.getRanking();
-        }
-        if (isFlush()) {
-            return FLUSH;
-        }
-        if (isStraight()) {
-            return STRAIGHT;
-        }
-        if (isThreeOfTheKind()) {
-            return THREE_OF_THE_KIND;
-        }
-        if (isTwoPair()) {
-            return TWO_PAIR;
-        }
-        if (isOnePair()) {
-            return ONE_PAIR;
-        }
-        if (isHighCard()) {
-            return HIGH_CARD;
+        Flush flush = new Flush();
+        Straight straight = new Straight();
+        ThreeOfTheKind threeOfTheKind = new ThreeOfTheKind();
+        TwoPair twoPair = new TwoPair();
+        OnePair onePair = new OnePair();
+        HighCard highCard = new HighCard();
+
+        List<RankingInterface> rankingList = Arrays.asList(royalFlush, straightFlush, fourOfTheKind, fullHouse, flush, straight, threeOfTheKind,
+                twoPair, onePair, highCard);
+        for (RankingInterface ranking : rankingList) {
+            if(ranking.isTrue(getCardsRankCountMap(), getCards())){
+                return ranking.getRanking();
+            }
         }
         return null;
-    }
-
-    private boolean isStraight() {
-        List<Card> cards = this.cards;
-
-        if (!this.isSameSuit(cards)) {
-            Card previousCard = null;
-            for (Card card : cards) {
-                if (previousCard != null) {
-                    if (card.getPointNumber() - previousCard.getPointNumber() != -1) {
-                        return false;
-                    }
-                }
-                previousCard = card;
-            }
-            return true;
-        }
-        return false;
-    }
-
-    private boolean isFullHouse() {
-        Map<Point, Integer> cardsRankCountMap = getCardsRankCountMap();
-
-        if (cardsRankCountMap.size() == 2) {
-            for (Map.Entry<Point, Integer> next : cardsRankCountMap.entrySet()) {
-                if (next.getValue() == 2 || next.getValue() == 3) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    public static class FullHouse implements RankingInterface{
-
-        @Override
-        public boolean isTrue(Map<Point, Integer> map, List<Card> cards) {
-            if (map.size() == 2) {
-                for (Map.Entry<Point, Integer> next : map.entrySet()) {
-                    if (next.getValue() == 2 || next.getValue() == 3) {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-
-        @Override
-        public Ranking getRanking() {
-            return FULL_HOUSE;
-        }
-    }
-
-    private boolean isFlush() {
-        List<Card> cards = this.cards;
-
-        return this.isSameSuit(cards);
-    }
-
-    private boolean isThreeOfTheKind() {
-        Map<Point, Integer> cardsRankCountMap = getCardsRankCountMap();
-
-        for (Map.Entry<Point, Integer> pointIntegerEntry : cardsRankCountMap.entrySet()) {
-            if (pointIntegerEntry.getValue() == 3) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean isTwoPair() {
-        Map<Point, Integer> cardsRankCountMap = getCardsRankCountMap();
-
-        boolean isTwoPair = false;
-        if (cardsRankCountMap.size() == 3) {
-            isTwoPair = isPair(cardsRankCountMap);
-        }
-        return isTwoPair;
-    }
-
-    private boolean isOnePair() {
-        Map<Point, Integer> cardsRankCountMap = getCardsRankCountMap();
-
-        boolean isOnePair = false;
-        if (cardsRankCountMap.size() == 4) {
-            isOnePair = isPair(cardsRankCountMap);
-        }
-
-        return isOnePair;
-    }
-
-    public boolean isHighCard() {
-        Map<Point, Integer> cardsRankCountMap = getCardsRankCountMap();
-
-        if (cardsRankCountMap.size() == 5) {
-            if (!this.isSameSuit(cards)) {
-                if (cardsRankCountMap.keySet().size() == 5) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    private boolean isPair(Map<Point, Integer> cardsRankCountMap) {
-        for (Map.Entry<Point, Integer> next : cardsRankCountMap.entrySet()) {
-            if (next.getValue() == 2 || next.getValue() == 1) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public Map<Point, Integer> getCardsRankCountMap() {
