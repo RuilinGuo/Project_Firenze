@@ -6,10 +6,8 @@ import java.util.Map;
 import static domain.poker.Ranking.ROYAL_FLUSH;
 
 public class RoyalFlush implements RankingInterface{
-    public boolean isTrue(TexasRule texasRule) {
-        Map<Point, Integer> cardsRankCountMap = texasRule.getCardsRankCountMap();
-        List<Card> cards = texasRule.getCards();
-        if (texasRule.isSameSuit(cards)) {
+    public boolean isTrue(Map<Point, Integer> cardsRankCountMap, List<Card> cards) {
+        if (TexasRule.isSameSuit(cards)) {
             return cardsRankCountMap.containsKey(Point.TEN)
                     && cardsRankCountMap.containsKey(Point.JACK)
                     && cardsRankCountMap.containsKey(Point.QUEEN)

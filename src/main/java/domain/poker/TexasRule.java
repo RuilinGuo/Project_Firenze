@@ -30,11 +30,13 @@ public class TexasRule {
 
     public Ranking getRanking() {
         RoyalFlush royalFlush = new RoyalFlush();
-        if (royalFlush.isTrue(this)) {
+        if (royalFlush.isTrue(getCardsRankCountMap(), getCards())) {
             return royalFlush.getRanking();
         }
-        if (isStraightFlush()) {
-            return STRAIGHT_FLUSH;
+
+        StraightFlush straightFlush = new StraightFlush();
+        if (straightFlush.isTrue(getCardsRankCountMap(), getCards())) {
+            return straightFlush.getRanking();
         }
         if (isFourOfTheKind()) {
             return FOUR_OF_THE_KIND;
@@ -63,37 +65,22 @@ public class TexasRule {
         return null;
     }
 
-    private boolean isStraightFlush() {
-        List<Card> cards = this.cards;
-
-        if (this.isSameSuit(cards)) {
-            return isBasicStraight();
-        }
-        return false;
-    }
-
     private boolean isStraight() {
         List<Card> cards = this.cards;
 
         if (!this.isSameSuit(cards)) {
-            return isBasicStraight();
+            Card previousCard = null;
+            for (Card card : cards) {
+                if (previousCard != null) {
+                    if (card.getPointNumber() - previousCard.getPointNumber() != -1) {
+                        return false;
+                    }
+                }
+                previousCard = card;
+            }
+            return true;
         }
         return false;
-    }
-
-    private boolean isBasicStraight() {
-        List<Card> cards = this.cards;
-
-        Card previousCard = null;
-        for (Card card : cards) {
-            if (previousCard != null) {
-                if (card.getPointNumber() - previousCard.getPointNumber() != -1) {
-                    return false;
-                }
-            }
-            previousCard = card;
-        }
-        return true;
     }
 
     private boolean isFourOfTheKind() {
@@ -194,7 +181,7 @@ public class TexasRule {
         return rankCount;
     }
 
-    public boolean isSameSuit(List<Card> cards) {
+    public static boolean isSameSuit(List<Card> cards) {
         Suit suit = cards.get(0).getSuit();
         return cards.stream().allMatch(item -> item.getSuit().equals(suit));
     }
