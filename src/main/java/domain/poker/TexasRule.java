@@ -7,12 +7,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static domain.poker.Ranking.FLUSH;
-import static domain.poker.Ranking.FOUR_OF_THE_KIND;
 import static domain.poker.Ranking.FULL_HOUSE;
 import static domain.poker.Ranking.HIGH_CARD;
 import static domain.poker.Ranking.ONE_PAIR;
 import static domain.poker.Ranking.STRAIGHT;
-import static domain.poker.Ranking.STRAIGHT_FLUSH;
 import static domain.poker.Ranking.THREE_OF_THE_KIND;
 import static domain.poker.Ranking.TWO_PAIR;
 
@@ -38,11 +36,13 @@ public class TexasRule {
         if (straightFlush.isTrue(getCardsRankCountMap(), getCards())) {
             return straightFlush.getRanking();
         }
-        if (isFourOfTheKind()) {
-            return FOUR_OF_THE_KIND;
+        FourOfTheKind fourOfTheKind = new FourOfTheKind();
+        if (fourOfTheKind.isTrue(getCardsRankCountMap(), getCards())) {
+            return fourOfTheKind.getRanking();
         }
-        if (isFullHouse()) {
-            return FULL_HOUSE;
+        FullHouse fullHouse = new FullHouse();
+        if (fullHouse.isTrue(getCardsRankCountMap(), getCards())) {
+            return fullHouse.getRanking();
         }
         if (isFlush()) {
             return FLUSH;
@@ -83,17 +83,6 @@ public class TexasRule {
         return false;
     }
 
-    private boolean isFourOfTheKind() {
-        Map<Point, Integer> cardsRankCountMap = getCardsRankCountMap();
-
-        for (Map.Entry<Point, Integer> pointIntegerEntry : cardsRankCountMap.entrySet()) {
-            if (pointIntegerEntry.getValue() == 4) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     private boolean isFullHouse() {
         Map<Point, Integer> cardsRankCountMap = getCardsRankCountMap();
 
@@ -105,6 +94,26 @@ public class TexasRule {
             }
         }
         return false;
+    }
+
+    public static class FullHouse implements RankingInterface{
+
+        @Override
+        public boolean isTrue(Map<Point, Integer> map, List<Card> cards) {
+            if (map.size() == 2) {
+                for (Map.Entry<Point, Integer> next : map.entrySet()) {
+                    if (next.getValue() == 2 || next.getValue() == 3) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public Ranking getRanking() {
+            return FULL_HOUSE;
+        }
     }
 
     private boolean isFlush() {
