@@ -1,5 +1,6 @@
 import domain.poker.Card;
 import domain.poker.Point;
+import domain.poker.ranking.RankingResult;
 import domain.poker.Suit;
 import domain.poker.TexasRule;
 import org.junit.jupiter.api.Test;
@@ -173,6 +174,27 @@ public class RankingTest {
 
     @Test
     void should_compare_same_ranking() {
-        
+        TexasRule texasRule = new TexasRule();
+
+        Card card1A = new Card(Suit.HEART, Point.TEN);
+        Card card2A = new Card(Suit.HEART, Point.JACK);
+        Card card3A = new Card(Suit.HEART, Point.QUEEN);
+        Card card4A = new Card(Suit.HEART, Point.KING);
+        Card card5A = new Card(Suit.HEART, Point.ACE);
+        List<Card> cardsA = Arrays.asList(card1A, card2A, card3A, card4A, card5A);
+        texasRule.setCards(cardsA);
+        RankingResult rankingResultA = texasRule.getRankingResult();
+
+        Card card1B = new Card(Suit.HEART, Point.TEN);
+        Card card2B = new Card(Suit.HEART, Point.JACK);
+        Card card3B = new Card(Suit.HEART, Point.QUEEN);
+        Card card4B = new Card(Suit.HEART, Point.KING);
+        Card card5B = new Card(Suit.HEART, Point.ACE);
+        List<Card> cardsB = Arrays.asList(card1B, card2B, card3B, card4B, card5B);
+        texasRule.setCards(cardsB);
+        RankingResult rankingResultB = texasRule.getRankingResult();
+
+        assertEquals(rankingResultA.compare(rankingResultB));
+
     }
 }

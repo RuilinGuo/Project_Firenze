@@ -1,13 +1,15 @@
-package domain.poker;
+package domain.poker.ranking;
+
+import domain.poker.Card;
+import domain.poker.Point;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static domain.poker.Ranking.STRAIGHT_FLUSH;
-import static domain.poker.Ranking.THREE_OF_THE_KIND;
+import static domain.poker.Ranking.ONE_PAIR;
 
-public class ThreeOfTheKind implements RankingInterface {
+public class OnePair implements RankingInterface {
 
     private List<Card> cards;
 
@@ -19,9 +21,11 @@ public class ThreeOfTheKind implements RankingInterface {
     @Override
     public boolean isTrue() {
         Map<Point, Integer> map = getCardsRankCountMap(cards);
-        for (Map.Entry<Point, Integer> pointIntegerEntry : map.entrySet()) {
-            if (pointIntegerEntry.getValue() == 3) {
-                return true;
+        if (map.size() == 4) {
+            for (Map.Entry<Point, Integer> next : map.entrySet()) {
+                if (next.getValue() == 2 || next.getValue() == 1) {
+                    return true;
+                }
             }
         }
         return false;
@@ -32,6 +36,6 @@ public class ThreeOfTheKind implements RankingInterface {
         if (Objects.isNull(cards)) {
             return new RankingResult();
         }
-        return new RankingResult(cards.get(0), THREE_OF_THE_KIND, cards);
+        return new RankingResult(cards.get(0), ONE_PAIR, cards);
     }
 }

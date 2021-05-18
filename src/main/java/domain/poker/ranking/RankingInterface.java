@@ -1,4 +1,8 @@
-package domain.poker;
+package domain.poker.ranking;
+
+import domain.poker.Card;
+import domain.poker.Point;
+import domain.poker.Suit;
 
 import java.util.HashMap;
 import java.util.List;

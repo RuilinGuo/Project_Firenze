@@ -1,13 +1,15 @@
-package domain.poker;
+package domain.poker.ranking;
+
+import domain.poker.Card;
+import domain.poker.Point;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static domain.poker.Ranking.HIGH_CARD;
-import static domain.poker.Ranking.ONE_PAIR;
+import static domain.poker.Ranking.FULL_HOUSE;
 
-public class OnePair implements RankingInterface {
+public class FullHouse implements RankingInterface {
 
     private List<Card> cards;
 
@@ -19,9 +21,9 @@ public class OnePair implements RankingInterface {
     @Override
     public boolean isTrue() {
         Map<Point, Integer> map = getCardsRankCountMap(cards);
-        if (map.size() == 4) {
+        if (map.size() == 2) {
             for (Map.Entry<Point, Integer> next : map.entrySet()) {
-                if (next.getValue() == 2 || next.getValue() == 1) {
+                if (next.getValue() == 2 || next.getValue() == 3) {
                     return true;
                 }
             }
@@ -34,6 +36,6 @@ public class OnePair implements RankingInterface {
         if (Objects.isNull(cards)) {
             return new RankingResult();
         }
-        return new RankingResult(cards.get(0), ONE_PAIR, cards);
+        return new RankingResult(cards.get(0), FULL_HOUSE, cards);
     }
 }

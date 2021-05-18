@@ -1,12 +1,16 @@
-package domain.poker;
+package domain.poker.ranking;
+
+import domain.poker.Card;
+import domain.poker.Point;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static domain.poker.Ranking.FOUR_OF_THE_KIND;
+import static domain.poker.Ranking.THREE_OF_THE_KIND;
 
-public class FourOfTheKind implements RankingInterface {
+public class ThreeOfTheKind implements RankingInterface {
+
     private List<Card> cards;
 
     @Override
@@ -18,7 +22,7 @@ public class FourOfTheKind implements RankingInterface {
     public boolean isTrue() {
         Map<Point, Integer> map = getCardsRankCountMap(cards);
         for (Map.Entry<Point, Integer> pointIntegerEntry : map.entrySet()) {
-            if (pointIntegerEntry.getValue() == 4) {
+            if (pointIntegerEntry.getValue() == 3) {
                 return true;
             }
         }
@@ -30,6 +34,6 @@ public class FourOfTheKind implements RankingInterface {
         if (Objects.isNull(cards)) {
             return new RankingResult();
         }
-        return new RankingResult(cards.get(0), FOUR_OF_THE_KIND, cards);
+        return new RankingResult(cards.get(0), THREE_OF_THE_KIND, cards);
     }
 }

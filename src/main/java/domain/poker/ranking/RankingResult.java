@@ -1,8 +1,11 @@
-package domain.poker;
+package domain.poker.ranking;
+
+import domain.poker.Card;
+import domain.poker.Ranking;
 
 import java.util.List;
 
-public class RankingResult {
+public class RankingResult{
     private Card highCard;
     private Ranking ranking;
     private List<Card> cards;

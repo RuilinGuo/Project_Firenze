@@ -1,10 +1,12 @@
-package domain.poker;
+package domain.poker.ranking;
+
+import domain.poker.Card;
+import domain.poker.Point;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static domain.poker.Ranking.ONE_PAIR;
 import static domain.poker.Ranking.ROYAL_FLUSH;
 
 public class RoyalFlush implements RankingInterface{

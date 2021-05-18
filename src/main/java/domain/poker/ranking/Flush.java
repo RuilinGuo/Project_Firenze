@@ -1,7 +1,8 @@
-package domain.poker;
+package domain.poker.ranking;
+
+import domain.poker.Card;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 import static domain.poker.Ranking.FLUSH;
