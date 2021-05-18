@@ -10,7 +10,7 @@ public class HighCard implements RankingInterface {
     @Override
     public boolean isTrue(Map<Point, Integer> map, List<Card> cards) {
         if (map.size() == 5) {
-            if (!TexasRule.isSameSuit(cards)) {
+            if (!isSameSuit(cards)) {
                 if (map.keySet().size() == 5) {
                     return true;
                 }

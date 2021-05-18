@@ -9,7 +9,7 @@ public class Flush implements RankingInterface {
 
     @Override
     public boolean isTrue(Map<Point, Integer> map, List<Card> cards) {
-        return TexasRule.isSameSuit(cards);
+        return isSameSuit(cards);
     }
 
     @Override

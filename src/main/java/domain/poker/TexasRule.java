@@ -54,9 +54,4 @@ public class TexasRule {
         }
         return rankCount;
     }
-
-    public static boolean isSameSuit(List<Card> cards) {
-        Suit suit = cards.get(0).getSuit();
-        return cards.stream().allMatch(item -> item.getSuit().equals(suit));
-    }
 }

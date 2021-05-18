@@ -9,7 +9,7 @@ public class Straight implements RankingInterface {
 
     @Override
     public boolean isTrue(Map<Point, Integer> map, List<Card> cards) {
-        if (!TexasRule.isSameSuit(cards)) {
+        if (!isSameSuit(cards)) {
             Card previousCard = null;
             for (Card card : cards) {
                 if (previousCard != null) {
