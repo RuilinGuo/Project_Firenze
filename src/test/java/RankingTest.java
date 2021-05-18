@@ -33,7 +33,7 @@ public class RankingTest {
 
         TexasRule texasRule = new TexasRule();
         texasRule.setCards(cards);
-        assertEquals(HIGH_CARD, texasRule.getRanking());
+        assertEquals(HIGH_CARD, texasRule.getRankingResult().getRanking());
     }
 
     @Test
@@ -48,7 +48,7 @@ public class RankingTest {
 
         TexasRule texasRule = new TexasRule();
         texasRule.setCards(cards);
-        assertEquals(ONE_PAIR, texasRule.getRanking());
+        assertEquals(ONE_PAIR, texasRule.getRankingResult().getRanking());
     }
 
     @Test
@@ -63,7 +63,7 @@ public class RankingTest {
 
         TexasRule texasRule = new TexasRule();
         texasRule.setCards(cards);
-        assertEquals(TWO_PAIR, texasRule.getRanking());
+        assertEquals(TWO_PAIR, texasRule.getRankingResult().getRanking());
     }
 
     @Test
@@ -78,7 +78,7 @@ public class RankingTest {
 
         TexasRule texasRule = new TexasRule();
         texasRule.setCards(cards);
-        assertEquals(THREE_OF_THE_KIND, texasRule.getRanking());
+        assertEquals(THREE_OF_THE_KIND, texasRule.getRankingResult().getRanking());
     }
 
     @Test
@@ -93,7 +93,7 @@ public class RankingTest {
 
         TexasRule texasRule = new TexasRule();
         texasRule.setCards(cards);
-        assertEquals(STRAIGHT, texasRule.getRanking());
+        assertEquals(STRAIGHT, texasRule.getRankingResult().getRanking());
     }
 
     @Test
@@ -108,7 +108,7 @@ public class RankingTest {
 
         TexasRule texasRule = new TexasRule();
         texasRule.setCards(cards);
-        assertEquals(FLUSH, texasRule.getRanking());
+        assertEquals(FLUSH, texasRule.getRankingResult().getRanking());
     }
 
     @Test
@@ -123,7 +123,7 @@ public class RankingTest {
 
         TexasRule texasRule = new TexasRule();
         texasRule.setCards(cards);
-        assertEquals(FULL_HOUSE, texasRule.getRanking());
+        assertEquals(FULL_HOUSE, texasRule.getRankingResult().getRanking());
     }
 
     @Test
@@ -138,7 +138,7 @@ public class RankingTest {
 
         TexasRule texasRule = new TexasRule();
         texasRule.setCards(cards);
-        assertEquals(FOUR_OF_THE_KIND, texasRule.getRanking());
+        assertEquals(FOUR_OF_THE_KIND, texasRule.getRankingResult().getRanking());
     }
 
     @Test
@@ -153,7 +153,7 @@ public class RankingTest {
 
         TexasRule texasRule = new TexasRule();
         texasRule.setCards(cards);
-        assertEquals(STRAIGHT_FLUSH, texasRule.getRanking());
+        assertEquals(STRAIGHT_FLUSH, texasRule.getRankingResult().getRanking());
     }
 
     @Test
@@ -168,7 +168,7 @@ public class RankingTest {
 
         TexasRule texasRule = new TexasRule();
         texasRule.setCards(cards);
-        assertEquals(ROYAL_FLUSH, texasRule.getRanking());
+        assertEquals(ROYAL_FLUSH, texasRule.getRankingResult().getRanking());
     }
 
     @Test

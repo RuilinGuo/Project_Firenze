@@ -33,11 +33,11 @@ public class TexasRule {
         this.cards = cards.stream().sorted(Comparator.comparing(Card::getPointNumber).reversed()).collect(Collectors.toList());
     }
 
-    public Ranking getRanking() {
+    public RankingResult getRankingResult() {
         for (RankingInterface ranking : rankingList) {
             ranking.setCards(getCards());
             if(ranking.isTrue()){
-                return ranking.getRankingResult().getRanking();
+                return ranking.getRankingResult();
             }
         }
         return null;
