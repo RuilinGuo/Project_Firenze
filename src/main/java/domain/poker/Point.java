@@ -24,4 +24,8 @@ public enum Point {
     public Integer getPoint() {
         return point;
     }
+
+    public int compare(Point p2){
+        return this.getPoint().compareTo(p2.getPoint());
+    }
 }

@@ -1,10 +1,12 @@
 package domain.poker.rankingCompare;
 
+import domain.poker.Card;
 import domain.poker.Point;
 import domain.poker.ranking.RankingResult;
 
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 abstract class DefaultComparing implements Comparator<RankingResult>{
@@ -18,6 +20,13 @@ abstract class DefaultComparing implements Comparator<RankingResult>{
         }
         if (p1MaxNumber.getPoint() < p2MaxNumber.getPoint()) {
             return -1;
+        }
+        if(p1MaxNumber.getPoint() == p2MaxNumber.getPoint()){
+            map1.remove(p1MaxNumber);
+            map2.remove(p2MaxNumber);
+            p1MaxNumber = getMaxNumber(map1, 1);
+            p2MaxNumber = getMaxNumber(map2, 1);
+            return p1MaxNumber.compare(p2MaxNumber);
         }
         return 0;
     }
@@ -34,13 +43,13 @@ abstract class DefaultComparing implements Comparator<RankingResult>{
         return maxNumber;
     }
 
-    public int seqComparing(RankingResult o1, RankingResult o2) {
-        int size = o1.getCards().size();
+    public int seqComparing(List<Card> card1, List<Card> card2) {
+        int size = card1.size();
         for (int i = 0; i < size; i++) {
-            if (o1.getCards().get(i).getPointNumber() < o2.getCards().get(i).getPointNumber()) {
+            if (card1.get(i).getPointNumber() < card2.get(i).getPointNumber()) {
                 return -1;
             }
-            if (o1.getCards().get(i).getPointNumber() > o2.getCards().get(i).getPointNumber()) {
+            if (card1.get(i).getPointNumber() > card2.get(i).getPointNumber()) {
                 return 1;
             }
         }
