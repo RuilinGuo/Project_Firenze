@@ -8,7 +8,8 @@ import static domain.poker.Ranking.TWO_PAIR;
 public class TwoPair implements RankingInterface {
 
     @Override
-    public boolean isTrue(Map<Point, Integer> map, List<Card> cards) {
+    public boolean isTrue(List<Card> cards) {
+        Map<Point, Integer> map = getCardsRankCountMap(cards);
         if (map.size() == 3) {
             for (Map.Entry<Point, Integer> next : map.entrySet()) {
                 if (next.getValue() == 2 || next.getValue() == 1) {

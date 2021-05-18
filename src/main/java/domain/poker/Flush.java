@@ -8,7 +8,7 @@ import static domain.poker.Ranking.FLUSH;
 public class Flush implements RankingInterface {
 
     @Override
-    public boolean isTrue(Map<Point, Integer> map, List<Card> cards) {
+    public boolean isTrue(List<Card> cards) {
         return isSameSuit(cards);
     }
 

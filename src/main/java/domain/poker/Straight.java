@@ -8,7 +8,7 @@ import static domain.poker.Ranking.STRAIGHT;
 public class Straight implements RankingInterface {
 
     @Override
-    public boolean isTrue(Map<Point, Integer> map, List<Card> cards) {
+    public boolean isTrue(List<Card> cards) {
         if (!isSameSuit(cards)) {
             Card previousCard = null;
             for (Card card : cards) {

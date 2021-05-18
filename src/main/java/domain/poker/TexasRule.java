@@ -34,24 +34,10 @@ public class TexasRule {
         List<RankingInterface> rankingList = Arrays.asList(royalFlush, straightFlush, fourOfTheKind, fullHouse, flush, straight, threeOfTheKind,
                 twoPair, onePair, highCard);
         for (RankingInterface ranking : rankingList) {
-            if(ranking.isTrue(getCardsRankCountMap(), getCards())){
+            if(ranking.isTrue(getCards())){
                 return ranking.getRanking();
             }
         }
         return null;
-    }
-
-    public Map<Point, Integer> getCardsRankCountMap() {
-        Map<Point, Integer> rankCount = new HashMap<>();
-        List<Card> cards = this.cards;
-
-        for (Card card : cards) {
-            if (!rankCount.containsKey(card.getPoint())) {
-                rankCount.put(card.getPoint(), 1);
-            } else {
-                rankCount.put(card.getPoint(), rankCount.get(card.getPoint()) + 1);
-            }
-        }
-        return rankCount;
     }
 }

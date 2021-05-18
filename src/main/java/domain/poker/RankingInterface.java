@@ -1,14 +1,28 @@
 package domain.poker;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public interface RankingInterface {
-    boolean isTrue(Map<Point, Integer> map, List<Card> cards);
+    boolean isTrue(List<Card> cards);
     Ranking getRanking();
 
     default boolean isSameSuit(List<Card> cards){
         Suit suit = cards.get(0).getSuit();
         return cards.stream().allMatch(item -> item.getSuit().equals(suit));
+    }
+
+    default Map<Point, Integer> getCardsRankCountMap(List<Card> cards) {
+        Map<Point, Integer> rankCount = new HashMap<>();
+
+        for (Card card : cards) {
+            if (!rankCount.containsKey(card.getPoint())) {
+                rankCount.put(card.getPoint(), 1);
+            } else {
+                rankCount.put(card.getPoint(), rankCount.get(card.getPoint()) + 1);
+            }
+        }
+        return rankCount;
     }
 }
