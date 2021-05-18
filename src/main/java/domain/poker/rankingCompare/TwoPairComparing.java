@@ -2,10 +2,10 @@ package domain.poker.rankingCompare;
 
 import domain.poker.ranking.RankingResult;
 
-public class HighCardComparing extends DefaultComparing {
-
+public class TwoPairComparing extends DefaultComparing{
     @Override
     public int compare(RankingResult o1, RankingResult o2) {
-        return this.seqComparing(o1, o2);
+        return this.pairComparing(o1.getMap(), o2.getMap(), 2, 3);
     }
+
 }

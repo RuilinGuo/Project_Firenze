@@ -36,6 +36,6 @@ public class HighCard implements RankingInterface {
         if (Objects.isNull(cards)) {
             return new RankingResult();
         }
-        return new RankingResult(cards.get(0), HIGH_CARD, cards);
+        return new RankingResult(cards.get(0), HIGH_CARD, cards, getCardsRankCountMap(cards));
     }
 }

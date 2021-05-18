@@ -33,6 +33,6 @@ public class RoyalFlush implements RankingInterface{
         if (Objects.isNull(cards)) {
             return new RankingResult();
         }
-        return new RankingResult(cards.get(0), ROYAL_FLUSH, cards);
+        return new RankingResult(cards.get(0), ROYAL_FLUSH, cards, getCardsRankCountMap(cards));
     }
 }

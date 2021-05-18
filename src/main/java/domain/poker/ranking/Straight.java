@@ -38,6 +38,6 @@ public class Straight implements RankingInterface {
         if (Objects.isNull(cards)) {
             return new RankingResult();
         }
-        return new RankingResult(cards.get(0), STRAIGHT, cards);
+        return new RankingResult(cards.get(0), STRAIGHT, cards, getCardsRankCountMap(cards));
     }
 }

@@ -1,6 +1,7 @@
 package domain.poker;
 
 public enum Point {
+    ZERO(0),
     TWO(2),
     THREE(3),
     FOUR(4),

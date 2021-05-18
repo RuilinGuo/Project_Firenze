@@ -34,6 +34,6 @@ public class ThreeOfTheKind implements RankingInterface {
         if (Objects.isNull(cards)) {
             return new RankingResult();
         }
-        return new RankingResult(cards.get(0), THREE_OF_THE_KIND, cards);
+        return new RankingResult(cards.get(0), THREE_OF_THE_KIND, cards, getCardsRankCountMap(cards));
     }
 }

@@ -36,6 +36,6 @@ public class TwoPair implements RankingInterface {
         if (Objects.isNull(cards)) {
             return new RankingResult();
         }
-        return new RankingResult(cards.get(0), TWO_PAIR, cards);
+        return new RankingResult(cards.get(0), TWO_PAIR, cards, getCardsRankCountMap(cards));
     }
 }

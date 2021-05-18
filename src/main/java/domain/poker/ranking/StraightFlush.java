@@ -37,6 +37,6 @@ public class StraightFlush implements RankingInterface {
         if (Objects.isNull(cards)) {
             return new RankingResult();
         }
-        return new RankingResult(cards.get(0), STRAIGHT_FLUSH, cards);
+        return new RankingResult(cards.get(0), STRAIGHT_FLUSH, cards, getCardsRankCountMap(cards));
     }
 }

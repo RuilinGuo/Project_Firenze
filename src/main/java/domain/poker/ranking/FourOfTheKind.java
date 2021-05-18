@@ -33,6 +33,6 @@ public class FourOfTheKind implements RankingInterface {
         if (Objects.isNull(cards)) {
             return new RankingResult();
         }
-        return new RankingResult(cards.get(0), FOUR_OF_THE_KIND, cards);
+        return new RankingResult(cards.get(0), FOUR_OF_THE_KIND, cards, getCardsRankCountMap(cards));
     }
 }

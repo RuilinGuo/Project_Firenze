@@ -25,6 +25,6 @@ public class Flush implements RankingInterface {
         if (Objects.isNull(cards)) {
             return new RankingResult();
         }
-        return new RankingResult(cards.get(0), FLUSH, cards);
+        return new RankingResult(cards.get(0), FLUSH, cards, getCardsRankCountMap(cards));
     }
 }
