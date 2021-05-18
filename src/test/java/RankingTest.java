@@ -197,7 +197,7 @@ public class RankingTest {
         RankingResult rankingResultB = texasRule.getRankingResult();
 
         HighCardComparing highCardComparing = new HighCardComparing();
-        Assertions.assertTrue(highCardComparing.compare(rankingResultA, rankingResultB) < 0);
+        Assertions.assertTrue(highCardComparing.compare(rankingResultA, rankingResultB) > 0);
 
     }
 }

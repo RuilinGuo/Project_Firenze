@@ -12,10 +12,10 @@ public class HighCardComparing implements Comparator<RankingResult> {
 
         for (int i = 0; i < size; i++) {
             if (o1.getCards().get(i).getPointNumber() < o2.getCards().get(i).getPointNumber()) {
-                return 1;
+                return -1;
             }
             if (o1.getCards().get(i).getPointNumber() > o2.getCards().get(i).getPointNumber()) {
-                return -1;
+                return 1;
             }
         }
         return 0;
