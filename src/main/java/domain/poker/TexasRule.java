@@ -1,19 +1,11 @@
 package domain.poker;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import static domain.poker.Ranking.FLUSH;
-import static domain.poker.Ranking.HIGH_CARD;
-import static domain.poker.Ranking.ONE_PAIR;
-import static domain.poker.Ranking.STRAIGHT;
-import static domain.poker.Ranking.THREE_OF_THE_KIND;
-import static domain.poker.Ranking.TWO_PAIR;
 
 public class TexasRule {
 
