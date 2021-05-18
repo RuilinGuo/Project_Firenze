@@ -8,16 +8,8 @@ import java.util.stream.Collectors;
 public class TexasRule {
 
     private List<Card> cards;
-
-    public List<Card> getCards() {
-        return cards;
-    }
-
-    public void setCards(List<Card> cards) {
-        this.cards = cards.stream().sorted(Comparator.comparing(Card::getPointNumber).reversed()).collect(Collectors.toList());
-    }
-
-    public Ranking getRanking() {
+    public static List<RankingInterface> rankingList;
+    static {
         RoyalFlush royalFlush = new RoyalFlush();
         StraightFlush straightFlush = new StraightFlush();
         FourOfTheKind fourOfTheKind = new FourOfTheKind();
@@ -29,8 +21,19 @@ public class TexasRule {
         OnePair onePair = new OnePair();
         HighCard highCard = new HighCard();
 
-        List<RankingInterface> rankingList = Arrays.asList(royalFlush, straightFlush, fourOfTheKind, fullHouse, flush, straight, threeOfTheKind,
+        rankingList = Arrays.asList(royalFlush, straightFlush, fourOfTheKind, fullHouse, flush, straight, threeOfTheKind,
                 twoPair, onePair, highCard);
+    }
+
+    public List<Card> getCards() {
+        return cards;
+    }
+
+    public void setCards(List<Card> cards) {
+        this.cards = cards.stream().sorted(Comparator.comparing(Card::getPointNumber).reversed()).collect(Collectors.toList());
+    }
+
+    public Ranking getRanking() {
         for (RankingInterface ranking : rankingList) {
             ranking.setCards(getCards());
             if(ranking.isTrue()){
