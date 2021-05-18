@@ -11,7 +11,7 @@ import java.util.Map;
 
 abstract class DefaultComparing implements Comparator<RankingResult>{
 
-    public int multiComparing(Map<Point, Integer> map1, Map<Point, Integer> map2, int pair) {
+    public int multiComparing(Map<Point, Integer> map1, Map<Point, Integer> map2, int pair, int another) {
         Point p1MaxNumber = getMaxNumber(map1, pair);
         Point p2MaxNumber = getMaxNumber(map2, pair);
 
@@ -24,8 +24,8 @@ abstract class DefaultComparing implements Comparator<RankingResult>{
         if(p1MaxNumber.getPoint() == p2MaxNumber.getPoint()){
             map1.remove(p1MaxNumber);
             map2.remove(p2MaxNumber);
-            p1MaxNumber = getMaxNumber(map1, 1);
-            p2MaxNumber = getMaxNumber(map2, 1);
+            p1MaxNumber = getMaxNumber(map1, another);
+            p2MaxNumber = getMaxNumber(map2, another);
             return p1MaxNumber.compare(p2MaxNumber);
         }
         return 0;
