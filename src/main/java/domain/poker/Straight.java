@@ -2,13 +2,22 @@ package domain.poker;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
+import static domain.poker.Ranking.ROYAL_FLUSH;
 import static domain.poker.Ranking.STRAIGHT;
 
 public class Straight implements RankingInterface {
 
+    private List<Card> cards;
+
     @Override
-    public boolean isTrue(List<Card> cards) {
+    public void setCards(List<Card> cards) {
+        this.cards = cards;
+    }
+
+    @Override
+    public boolean isTrue() {
         if (!isSameSuit(cards)) {
             Card previousCard = null;
             for (Card card : cards) {
@@ -25,7 +34,10 @@ public class Straight implements RankingInterface {
     }
 
     @Override
-    public Ranking getRanking() {
-        return STRAIGHT;
+    public RankingResult getRankingResult() {
+        if (Objects.isNull(cards)) {
+            return new RankingResult();
+        }
+        return new RankingResult(cards.get(0), STRAIGHT, cards);
     }
 }

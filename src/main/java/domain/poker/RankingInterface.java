@@ -5,8 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 public interface RankingInterface {
-    boolean isTrue(List<Card> cards);
-    Ranking getRanking();
+    void setCards(List<Card> cards);
+    boolean isTrue();
+    RankingResult getRankingResult();
 
     default boolean isSameSuit(List<Card> cards){
         Suit suit = cards.get(0).getSuit();

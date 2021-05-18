@@ -2,9 +2,7 @@ package domain.poker;
 
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class TexasRule {
@@ -34,8 +32,9 @@ public class TexasRule {
         List<RankingInterface> rankingList = Arrays.asList(royalFlush, straightFlush, fourOfTheKind, fullHouse, flush, straight, threeOfTheKind,
                 twoPair, onePair, highCard);
         for (RankingInterface ranking : rankingList) {
-            if(ranking.isTrue(getCards())){
-                return ranking.getRanking();
+            ranking.setCards(getCards());
+            if(ranking.isTrue()){
+                return ranking.getRankingResult().getRanking();
             }
         }
         return null;
